@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+# Copyright (C) 2009 Paul Bender.
+#
+# This file is part of eventlircd.
+#
+# eventlircd is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# eventlircd is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with eventlircd.  If not, see <http://www.gnu.org/licenses/>.
+
+ABSOLUTE_LINUX_INPUT_H=@ABSOLUTE_LINUX_INPUT_H@
+AWK=@AWK@
+GREP=@GREP@
+
+rm -f evkey_code_to_name.h
+
+echo "#ifndef _LIRCUDEVD_EVKEY_CODE_TO_NAME_H_" >> evkey_code_to_name.h
+echo "#define _LIRCUDEVD_EVKEY_CODE_TO_NAME_H_ 1" >> evkey_code_to_name.h
+
+echo "#include <${ABSOLUTE_LINUX_INPUT_H}>" >> evkey_code_to_name.h
+
+echo "static const char *evkey_code_to_name[KEY_MAX] =" >> evkey_code_to_name.h
+echo "{" >> evkey_code_to_name.h
+${AWK} "
+    /#define KEY_CNT/             { next; };
+    /#define KEY_MAX/             { next; };
+    /#define KEY_MIN_INTERESTING/ { next; };
+    /#define KEY_RESERVED/        { next; };
+    /#define KEY_/                {
+                                    printf(\"    [ %-20s ] = \\\"%s\\\",\n\", \$2, \$2);
+                                  };
+    /#define BTN_/                {
+                                    printf(\"    [ %-20s ] = \\\"%s\\\",\n\", \$2, \$2);
+                                  };
+    " < ${ABSOLUTE_LINUX_INPUT_H} >> evkey_code_to_name.h
+echo "};" >> evkey_code_to_name.h
+
+echo "#endif" >> evkey_code_to_name.h
