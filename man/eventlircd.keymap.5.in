@@ -1,0 +1,198 @@
+.\" Copyright (C) 2009 Paul Bender.
+.\"
+.\" This file is part of eventlircd.
+.\"
+.\" eventlircd is free software: you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation, either version 2 of the License, or
+.\" (at your option) any later version.
+.\"
+.\" eventlircd is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with eventlircd.  If not, see <http://www.gnu.org/licenses/>.
+.\"
+.TH eventlircd.keymap 5 "DECEMBER 09, 2009"
+.SH NAME
+@KEYMAP_DIR@/*.keymap \- an input device key map file for \fBeventlircd (8)\fR.
+.SH INTRODUCTION
+\fBeventlircd\fR can map keyboard shortcuts to single keys (as well as single keys to different single keys).
+.SH DESCRIPTION
+The input device key map file contains the case sensitive lines
+.LP
+[\fBcapslock\fR+][\fBnumlock\fR+][\fBscrolllock\fR+][\fBctrl\fR+][\fBshift\fR+][\fBalt\fR+][\fBmeta\fR+]\fB<key_in>\fR = \fB<key_out>\fR
+.LP
+where
+.TP
+\fBcapslock\fR
+The capslock lock key token.
+The KEY_CAPSLOCK key name is treated as the capslock lock key token.
+.TP
+\fBnumlock\fR
+The numlock lock key token.
+The KEY_NUMLOCK key name is treated as the numlock lock key token.
+.TP
+\fBscrolllock\fR
+The scrolllock lock key token.
+The KEY_SCROLLLOCK key name is treated as the scrolllock lock key token.
+.TP
+\fBctrl\fR
+The ctrl modifier key token.
+The KEY_LEFTCTRL and KEY_RIGHTCTRL key names are treated as the ctrl modifier key token.
+.TP
+\fBshift\fR
+The shift modifier key token.
+The KEY_LEFTSHIFT and KEY_RIGHTSHIFT key names are treated as the shift modifier key token.
+.TP
+\fBalt\fR
+The alt modifier key token.
+The KEY_LEFTALT and KEY_RIGHTALT key names are treated as the alt modifier key token.
+.TP
+\fBmeta\fR
+The meta modifier key token.
+The KEY_LEFTMETA and KEY_RIGHTMETA key names are treated as the meta modifier key token.
+.TP
+\fB<key_in>\fR
+The input key name.
+The key names that correspond to an input key name are the key names (KEY_* and BTN_*) defined in @includedir@/linux/input.h other than the key names that correspond to lock or modifier key tokens.
+.TP
+\fB<key_out>\fR
+The output key name.
+The key names that correspond to an output key name are any key names (KEY_* and BTN_*) defined in @includedir@/linux/input.h.
+In addition, the output key name may be the special value NULL,
+which will cause eventlircd to ignore the input keyboard shortcut.
+.LP
+An input device key map file may contain comments, which are ignored by \fBeventlircd\fR.
+A comment starts with a # and ends with a new line.
+For example, the Adesso ARC-1100 remote control might use an input device key map file with the lines
+.LP
+.PD 0
+.LP
+################################################################################
+.LP
+# Adesso ARC-1100 remote control (USB VendorId=05a4 ProductId=9881).
+.LP
+################################################################################
+.LP
+ KEY_HOMEPAGE        = KEY_WWW           # WWW
+.LP
+ KEY_SLEEP           = KEY_POWER         # Sleep
+.LP
+ ctrl+shift+KEY_T    = KEY_VCR           # My TV
+.LP
+ ctrl+KEY_M          = KEY_MP3           # My Music
+.LP
+ ctrl+KEY_I          = KEY_MEDIA         # My Pictures
+.LP
+ ctrl+KEY_E          = KEY_VIDEO         # My Videos
+.LP
+ ctrl+KEY_O          = KEY_VCR2          # Record TV
+.LP
+ ctrl+KEY_G          = KEY_PROGRAM       # Guide
+.LP
+ ctrl+KEY_T          = KEY_TV            # Live TV
+.LP
+ ctrl+shift+KEY_M    = KEY_DVD           # DVD Menu
+.LP
+ KEY_PLAYPAUSE       = KEY_PLAYPAUSE     # Play (also used for Pause)
+.LP
+#KEY_PLAYPAUSE       = KEY_PLAYPAUSE     # Pause (also used for Play)
+.LP
+ ctrl+shift+KEY_B    = KEY_REWIND        # Reverse
+.LP
+ ctrl+shift+KEY_F    = KEY_FORWARD       # Forward
+.LP
+ KEY_PREVIOUSSONG    = KEY_PREVIOUS      # Pre-track
+.LP
+ KEY_NEXTSONG        = KEY_NEXT          # Next track
+.LP
+ KEY_STOPCD          = KEY_STOP          # Stop
+.LP
+ ctrl+KEY_R          = KEY_RECORD        # Record
+.LP
+ KEY_BACKSPACE       = KEY_BACK          # Back
+.LP
+ BTN_RIGHT           = KEY_INFO          # Information (also used for Mouse Right)
+.LP
+ KEY_UP              = KEY_UP            # Direction Up
+.LP
+ KEY_DOWN            = KEY_DOWN          # Direction Down
+.LP
+ KEY_LEFT            = KEY_LEFT          # Direction Left
+.LP
+ KEY_RIGHT           = KEY_RIGHT         # Direction Right
+.LP
+ KEY_ENTER           = KEY_ENTER         # Direction OK (also used for Enter)
+.LP
+ BTN_MOUSE           = BTN_LEFT          # Mouse Left 
+.LP
+#BTN_RIGHT           = KEY_INFO          # Mouse Right (also used for Information)
+.LP
+ KEY_VOLUMEUP        = KEY_VOLUMEUP      # Volume Up
+.LP
+ KEY_VOLUMEDOWN      = KEY_VOLUMEDOWN    # Volume Down
+.LP
+ KEY_PAGEDOWN        = KEY_CHANNELDOWN   # Channel Up
+.LP
+ KEY_PAGEUP          = KEY_CHANNELUP     # Channel Down
+.LP
+ KEY_MUTE            = KEY_MUTE          # Mute
+.LP
+ alt+meta+KEY_ENTER  = KEY_MENU          # Start Key
+.LP
+ alt+KEY_F4          = KEY_CLOSE         # Close
+.LP
+ KEY_ESC             = KEY_CLEAR         # Clear
+.LP
+#KEY_ENTER           = KEY_ENTER         # Enter (also used for Direction OK)
+.LP
+ numlock+KEY_KP0     = KEY_0             # 0
+.LP
+ numlock+KEY_KP1     = KEY_1             # 1
+.LP
+ numlock+KEY_KP2     = KEY_2             # 2
+.LP
+ numlock+KEY_KP3     = KEY_3             # 3
+.LP
+ numlock+KEY_KP4     = KEY_4             # 4
+.LP
+ numlock+KEY_KP5     = KEY_5             # 5
+.LP
+ numlock+KEY_KP6     = KEY_6             # 6
+.LP
+ numlock+KEY_KP7     = KEY_7             # 7
+.LP
+ numlock+KEY_KP8     = KEY_8             # 8
+.LP
+ numlock+KEY_KP9     = KEY_9             # 9
+.LP
+ KEY_KPASTERISK      = KEY_ZOOM          # *
+.LP
+ numlock+alt+KEY_KP3 = KEY_TEXT          # #
+.LP
+ numlock+alt+KEY_KP5 = NULL              # Sent as part #, and we ignore it
+.PD
+.SH OPTIONS
+.SH FILES
+.SH ENVIRONMENT
+.SH DIAGNOSTICS
+.SH BUGS
+.SH CAVEATS
+.LP
+\fBeventlircd\fR associates some key names with lock and modifier key tokens:
+KEY_CAPSLOCK is associated with capslock,
+KEY_NUMLOCK is associated with numlock,
+KEY_SCROLLLOCK is associated with scrolllock,
+KEY_LEFTCTRL and KEY_RIGHTCTRL are associated with ctrl,
+KEY_LEFTSHIFT and KEY_RIGHTSHIFT are associated with shift,
+KEY_LEFTALT and KEY_RIGHTALT are associated with alt, and
+KEY_LEFTMETA and KEY_RIGHTMETA are associated with meta.
+The key names associated with lock and modifier key tokens,
+are not accepted as a base key.
+.SH AUTHOR
+Paul Bender
+.SH "SEE ALSO"
+.BR eventlircd (8)

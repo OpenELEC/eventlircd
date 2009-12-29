@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+# Copyright (C) 2009 Paul Bender.
+#
+# This file is part of eventlircd.
+#
+# eventlircd is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# eventlircd is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with eventlircd.  If not, see <http://www.gnu.org/licenses/>.
+
+ABSOLUTE_LINUX_INPUT_H=@ABSOLUTE_LINUX_INPUT_H@
+AWK=@AWK@
+GREP=@GREP@
+
+rm -f evkey_type.h
+
+echo "#ifndef _LIRCUDEVD_EVKEY_TYPE_H_" >> evkey_type.h
+echo "#define _LIRCUDEVD_EVKEY_TYPE_H_ 1" >> evkey_type.h
+
+echo "#include <${ABSOLUTE_LINUX_INPUT_H}>" >> evkey_type.h
+
+echo "#define LIRCUDEVD_EVKEY_TYPE_NULL 0" >> evkey_type.h
+echo "#define LIRCUDEVD_EVKEY_TYPE_KEY  1" >> evkey_type.h
+echo "#define LIRCUDEVD_EVKEY_TYPE_BTN  2" >> evkey_type.h
+
+echo "static const int evkey_type[KEY_MAX] =" >> evkey_type.h
+echo "{" >> evkey_type.h
+${AWK} "
+    /#define KEY_CNT/             { next; };
+    /#define KEY_MAX/             { next; };
+    /#define KEY_MIN_INTERESTING/ { next; };
+    /#define KEY_RESERVED/        { next; };
+    /#define KEY_/                { printf(\"\t[ %-20s ] = LIRCUDEVD_EVKEY_TYPE_KEY,\n\", \$2); };
+    /#define BTN_/                { printf(\"\t[ %-20s ] = LIRCUDEVD_EVKEY_TYPE_BTN,\n\", \$2); };
+" < ${ABSOLUTE_LINUX_INPUT_H} >> evkey_type.h
+echo "};" >> evkey_type.h
+
+echo "#endif" >> evkey_type.h
