@@ -62,21 +62,21 @@ LABEL="begin-usb"
 
 ENV{ID_USB_INTERFACES}=="", IMPORT{program}="usb_id --export %p"
 
-ENV{ID_VENDOR}=="0419", ENV{ID_MODEL}=="0001", \
+ENV{ID_VENDOR_ID}=="0419", ENV{ID_MODEL_ID}=="0001", \
   ENV{eventlircd_enable}="true",
-  ENV{eventlircd_keymap}="03_$env{ID_VENDOR}_$env{ID_MODEL}.keymap"
+  ENV{eventlircd_keymap}="03_$env{ID_VENDOR_ID}_$env{ID_MODEL_ID}.keymap"
 
-ENV{ID_VENDOR}=="05a4", ENV{ID_MODEL}=="9881", \
+ENV{ID_VENDOR_ID}=="05a4", ENV{ID_MODEL_ID}=="9881", \
   ENV{eventlircd_enable}="true", \
-  ENV{eventlircd_keymap}="03_$env{ID_VENDOR}_$env{ID_MODEL}.keymap"
+  ENV{eventlircd_keymap}="03_$env{ID_VENDOR_ID}_$env{ID_MODEL_ID}.keymap"
 
-ENV{ID_VENDOR}=="0766", ENV{ID_MODEL}=="0204", \
+ENV{ID_VENDOR_ID}=="0766", ENV{ID_MODEL_ID}=="0204", \
   ENV{eventlircd_enable}="true", \
-  ENV{eventlircd_keymap}="03_$env{ID_VENDOR}_$env{ID_MODEL}.keymap"
+  ENV{eventlircd_keymap}="03_$env{ID_VENDOR_ID}_$env{ID_MODEL_ID}.keymap"
 
-ENV{ID_VENDOR}=="147a", ENV{ID_MODEL}=="e02d", \
+ENV{ID_VENDOR_ID}=="147a", ENV{ID_MODEL_ID}=="e02d", \
   ENV{eventlircd_enable}="true", \
-  ENV{eventlircd_keymap}="03_$env{ID_VENDOR}_$env{ID_MODEL}.keymap"
+  ENV{eventlircd_keymap}="03_$env{ID_VENDOR_ID}_$env{ID_MODEL_ID}.keymap"
 
 # Enable wake-on-usb for the USB remotes.
 ENV{eventlircd_enable}=="true", RUN+="wakeup_enable"
