@@ -30,7 +30,7 @@ LABEL="begin-usb"
 
 ENV{ID_USB_INTERFACES}=="", IMPORT{program}="usb_id --export %p"
 
-ENV{ID_VENDOR}=="0fe9", ENV{ID_MODEL}=="9010", \
+ENV{ID_VENDOR_ID}=="0fe9", ENV{ID_MODEL_ID}=="9010", \
   ENV{lircd_driver}="dvico", \
   ENV{lircd_conf}="@sysconfdir@/lirc/lircd.conf"
 
