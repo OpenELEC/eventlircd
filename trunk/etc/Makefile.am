@@ -1,6 +1,7 @@
 keymapdir = $(KEYMAP_DIR)
 
 dist_keymap_DATA = \
+	03_0419_0001.keymap \
 	03_05a4_9881.keymap \
 	03_0766_0204.keymap \
 	03_147a_e02d.keymap \
