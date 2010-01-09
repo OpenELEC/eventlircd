@@ -47,3 +47,10 @@
  KEY_KPASTERISK      = KEY_ZOOM        # *
  numlock+alt+KEY_KP3 = KEY_TEXT        # #
  numlock+alt+KEY_KP5 = NULL            # Sent as part #, and we ignore it
+
+#The USB interface advertises these buttons but none of the remote control's
+#buttons appear to generate them. Therefore, they are set to NULL so that
+#eventlircd does not advertise them.
+ BTN_MIDDLE          = NULL
+ BTN_SIDE            = NULL
+ BTN_EXTRA           = NULL
