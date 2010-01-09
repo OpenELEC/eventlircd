@@ -32,22 +32,74 @@ echo "#include <linux/types.h>" >> evkey_name_to_code.h
 echo "static const struct" >> evkey_name_to_code.h
 echo "{" >> evkey_name_to_code.h
 echo "    const char *name;" >> evkey_name_to_code.h
+echo "    __u16 type;" >> evkey_name_to_code.h
 echo "    __u16 code;" >> evkey_name_to_code.h
 echo "} evkey_name_to_code[] =" >> evkey_name_to_code.h
 echo "{" >> evkey_name_to_code.h
 ${AWK} "
+    /#define SYN_/                {
+                                    code_str = \"\\\"\" \$2 \"\\\"\";
+                                    code_num = \$2;
+                                    printf(\"    { %-25s , EV_SYN , %-23s },\n\", code_str, code_num);
+                                  };
     /#define KEY_CNT/             { next; };
     /#define KEY_MAX/             { next; };
     /#define KEY_MIN_INTERESTING/ { next; };
     /#define KEY_RESERVED/        { next; };
     /#define KEY_/                {
-                                    printf(\"    { \\\"%s\\\" , %s },\n\", \$2, \$2);
+                                    code_str = \"\\\"\" \$2 \"\\\"\";
+                                    code_num = \$2;
+                                    printf(\"    { %-25s , EV_KEY , %-23s },\n\", code_str, code_num);
                                   };
     /#define BTN_/                {
-                                    printf(\"    { \\\"%s\\\" , %s },\n\", \$2, \$2);
+                                    code_str = \"\\\"\" \$2 \"\\\"\";
+                                    code_num = \$2;
+                                    printf(\"    { %-25s , EV_KEY , %-23s },\n\", code_str, code_num);
+                                  };
+    /#define REL_CNT/             { next; };
+    /#define REL_MAX/             { next; };
+    /#define REL_/                {
+                                    code_str = \"\\\"\" \$2 \"\\\"\";
+                                    code_num = \$2;
+                                    printf(\"    { %-25s , EV_REL , %-23s },\n\", code_str, code_num);
+                                  };
+    /#define ABS_CNT/             { next; };
+    /#define ABS_MAX/             { next; };
+    /#define ABS_/                {
+                                    code_str = \"\\\"\" \$2 \"\\\"\";
+                                    code_num = \$2;
+                                    printf(\"    { %-25s , EV_ABS , %-23s },\n\", code_str, code_num);
+                                  };
+    /#define MSC_CNT/             { next; };
+    /#define MSC_MAX/             { next; };
+    /#define MSC_/                {
+                                    code_str = \"\\\"\" \$2 \"\\\"\";
+                                    code_num = \$2;
+                                    printf(\"    { %-25s , EV_MSC , %-23s },\n\", code_str, code_num);
+                                  };
+    /#define SW_CNT/              { next; };
+    /#define SW_MAX/              { next; };
+    /#define SW_/                 {
+                                    code_str = \"\\\"\" \$2 \"\\\"\";
+                                    code_num = \$2;
+                                    printf(\"    { %-25s , EV_SW  , %-23s },\n\", code_str, code_num);
+                                  };
+    /#define LED_CNT/             { next; };
+    /#define LED_MAX/             { next; };
+    /#define LED_/                {
+                                    code_str = \"\\\"\" \$2 \"\\\"\";
+                                    code_num = \$2;
+                                    printf(\"    { %-25s , EV_LED , %-23s },\n\", code_str, code_num);
+                                  };
+    /#define SND_CNT/             { next; };
+    /#define SND_MAX/             { next; };
+    /#define SND_/                {
+                                    code_str = \"\\\"\" \$2 \"\\\"\";
+                                    code_num = \$2;
+                                    printf(\"    { %-25s , EV_SND , %-23s },\n\", code_str, code_num);
                                   };
     " < ${ABSOLUTE_LINUX_INPUT_H} >> evkey_name_to_code.h
-echo "    { NULL , 0 }," >> evkey_name_to_code.h
+echo "    { NULL                      , 0      , 0                       }," >> evkey_name_to_code.h
 echo "};" >> evkey_name_to_code.h
 
 echo "#endif" >> evkey_name_to_code.h

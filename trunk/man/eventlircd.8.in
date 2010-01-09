@@ -15,7 +15,7 @@
 .\" You should have received a copy of the GNU General Public License
 .\" along with eventlircd.  If not, see <http://www.gnu.org/licenses/>.
 .\"
-.TH eventlircd 8 "DECEMBER 16, 2009"
+.TH eventlircd 8 "JANUARY 09, 2010"
 .SH NAME
 eventlircd \- an LIRC daemon with integrated udev support.
 .SH SYNOPSIS

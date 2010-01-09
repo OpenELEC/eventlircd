@@ -15,15 +15,23 @@
 .\" You should have received a copy of the GNU General Public License
 .\" along with eventlircd.  If not, see <http://www.gnu.org/licenses/>.
 .\"
-.TH eventlircd.keymap 5 "DECEMBER 09, 2009"
+.TH eventlircd keymap 5 "JANUARY 09, 2010"
 .SH NAME
 @KEYMAP_DIR@/*.keymap \- an input device key map file for \fBeventlircd (8)\fR.
 .SH INTRODUCTION
 \fBeventlircd\fR can map keyboard shortcuts to single keys (as well as single keys to different single keys).
 .SH DESCRIPTION
-The input device key map file contains the case sensitive lines
+The input device key map file contains case sensitive lines each with one of the three following formats
 .LP
-[\fBcapslock\fR+][\fBnumlock\fR+][\fBscrolllock\fR+][\fBctrl\fR+][\fBshift\fR+][\fBalt\fR+][\fBmeta\fR+]\fB<key_in>\fR = \fB<key_out>\fR
+[\fBcapslock\fR+][\fBnumlock\fR+][\fBscrolllock\fR+][\fBctrl\fR+][\fBshift\fR+][\fBalt\fR+][\fBmeta\fR+]\fB<evkey_in>\fR = \fB<evkey_out>\fR
+.LP
+or
+.LP
+[\fBcapslock\fR+][\fBnumlock\fR+][\fBscrolllock\fR+][\fBctrl\fR+][\fBshift\fR+][\fBalt\fR+][\fBmeta\fR+]\fB<evkey_in>\fR = \fBNULL\fR
+.LP
+or
+.LP
+\fB<event_in>\fR = \fBNULL\fR
 .LP
 where
 .TP
@@ -55,15 +63,20 @@ The KEY_LEFTALT and KEY_RIGHTALT key names are treated as the alt modifier key t
 The meta modifier key token.
 The KEY_LEFTMETA and KEY_RIGHTMETA key names are treated as the meta modifier key token.
 .TP
-\fB<key_in>\fR
-The input key name.
-The key names that correspond to an input key name are the key names (KEY_* and BTN_*) defined in @includedir@/linux/input.h other than the key names that correspond to lock or modifier key tokens.
+\fB<evkey_in>\fR
+The input key event name.
+The key event names that correspond to an input key event name are the key event names (KEY_* and BTN_*) defined in @includedir@/linux/input.h other than the key event names that correspond to lock or modifier key tokens.
 .TP
-\fB<key_out>\fR
-The output key name.
-The key names that correspond to an output key name are any key names (KEY_* and BTN_*) defined in @includedir@/linux/input.h.
-In addition, the output key name may be the special value NULL,
-which will cause eventlircd to ignore the input keyboard shortcut.
+\fB<evkey_out>\fR
+The output key even name.
+The key event names that correspond to an output key event name are any key event names (KEY_* and BTN_*) defined in @includedir@/linux/input.h.
+.TP
+\fB<event_in>\fR
+The input event name.
+The event names that correspond to an input event name are the event names defined in @includedir@/linux/input.h other than the key event names that correspond to lock or modifier key tokens.
+.TP
+\fBNULL\fR
+A special value that tells \fBeventlircd\fR to ignore the input keyboard shortcut or event.
 .LP
 An input device key map file may contain comments, which are ignored by \fBeventlircd\fR.
 A comment starts with a # and ends with a new line.
@@ -174,6 +187,22 @@ For example, the Adesso ARC-1100 remote control might use an input device key ma
  numlock+alt+KEY_KP3 = KEY_TEXT          # #
 .LP
  numlock+alt+KEY_KP5 = NULL              # Sent as part #, and we ignore it
+.LP
+
+.LP
+#The USB interface advertises these events but none of the remote control's
+.LP
+#buttons appear to generate them. Therefore, they are set to NULL so that
+.LP
+#eventlircd does not advertise them as part of its mouse/joystick device.
+.LP
+ BTN_MIDDLE          = NULL
+.LP
+ BTN_SIDE            = NULL
+.LP
+ BTN_EXTRA           = NULL
+.LP
+ REL_WHEEL           = NULL
 .PD
 .SH OPTIONS
 .SH FILES
