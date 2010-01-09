@@ -57,6 +57,7 @@ AC_CHECK_HEADER([fcntl.h],[],[AC_MSG_ERROR([failed to find the required header f
 AC_CHECK_HEADER([signal.h],[],[AC_MSG_ERROR([failed to find the required header file signal.h])])             dnl C89
 AC_CHECK_HEADER([stdbool.h],[],[AC_MSG_ERROR([failed to find the required header file stdbool.h])])           dnl C99
 AC_CHECK_HEADER([stddef.h],[],[AC_MSG_ERROR([failed to find the required header file stddef.h])])             dnl C89
+AC_CHECK_HEADER([stdint.h],[],[AC_MSG_ERROR([failed to find the required header file stdint.h])])             dnl POSIX
 AC_CHECK_HEADER([stdio.h],[],[AC_MSG_ERROR([failed to find the required header file stdio.h])])               dnl C89
 AC_CHECK_HEADER([stdlib.h],[],[AC_MSG_ERROR([failed to find the required header file stdlib.h])])             dnl C89
 AC_CHECK_HEADER([string.h],[],[AC_MSG_ERROR([failed to find the required header file string.h])])             dnl C89
