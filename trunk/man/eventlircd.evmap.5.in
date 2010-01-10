@@ -1,4 +1,4 @@
-.\" Copyright (C) 2009 Paul Bender.
+.\" Copyright (C) 2009-2010 Paul Bender.
 .\"
 .\" This file is part of eventlircd.
 .\"
@@ -15,13 +15,14 @@
 .\" You should have received a copy of the GNU General Public License
 .\" along with eventlircd.  If not, see <http://www.gnu.org/licenses/>.
 .\"
-.TH eventlircd keymap 5 "JANUARY 09, 2010"
+.TH eventlircd evmap 5 "JANUARY 09, 2010"
 .SH NAME
-@KEYMAP_DIR@/*.keymap \- an input device key map file for \fBeventlircd (8)\fR.
+@EVMAP_DIR@/*.evmap \- an input device event map file for \fBeventlircd (8)\fR.
 .SH INTRODUCTION
-\fBeventlircd\fR can map keyboard shortcuts to single keys (as well as single keys to different single keys).
+\fBeventlircd\fR can map keyboard shortcuts to single key events.
+In addition, can map keyboard shortcuts and input events to NULL.
 .SH DESCRIPTION
-The input device key map file contains case sensitive lines each with one of the three following formats
+The input device event map file contains case sensitive lines each with one of the three following formats
 .LP
 [\fBcapslock\fR+][\fBnumlock\fR+][\fBscrolllock\fR+][\fBctrl\fR+][\fBshift\fR+][\fBalt\fR+][\fBmeta\fR+]\fB<evkey_in>\fR = \fB<evkey_out>\fR
 .LP
@@ -78,9 +79,9 @@ The event names that correspond to an input event name are the event names defin
 \fBNULL\fR
 A special value that tells \fBeventlircd\fR to ignore the input keyboard shortcut or event.
 .LP
-An input device key map file may contain comments, which are ignored by \fBeventlircd\fR.
+An input device event map file may contain comments, which are ignored by \fBeventlircd\fR.
 A comment starts with a # and ends with a new line.
-For example, the Adesso ARC-1100 remote control might use an input device key map file with the lines
+For example, the Adesso ARC-1100 remote control might use an input device event map file with the lines
 .LP
 .PD 0
 .LP

@@ -21,21 +21,21 @@ ABSOLUTE_LINUX_INPUT_H=@ABSOLUTE_LINUX_INPUT_H@
 AWK=@AWK@
 GREP=@GREP@
 
-rm -f evkey_name_to_code.h
+rm -f event_name_to_code.h
 
-echo "#ifndef _LIRCUDEVD_EVKEY_NAME_TO_CODE_H_" >> evkey_name_to_code.h
-echo "#define _LIRCUDEVD_EVKEY_NAME_TO_CODE_H_ 1" >> evkey_name_to_code.h
+echo "#ifndef _LIRCUDEVD_EVENT_NAME_TO_CODE_H_" >> event_name_to_code.h
+echo "#define _LIRCUDEVD_EVENT_NAME_TO_CODE_H_ 1" >> event_name_to_code.h
 
-echo "#include <${ABSOLUTE_LINUX_INPUT_H}>" >> evkey_name_to_code.h
-echo "#include <linux/types.h>" >> evkey_name_to_code.h
+echo "#include <${ABSOLUTE_LINUX_INPUT_H}>" >> event_name_to_code.h
+echo "#include <linux/types.h>" >> event_name_to_code.h
 
-echo "static const struct" >> evkey_name_to_code.h
-echo "{" >> evkey_name_to_code.h
-echo "    const char *name;" >> evkey_name_to_code.h
-echo "    __u16 type;" >> evkey_name_to_code.h
-echo "    __u16 code;" >> evkey_name_to_code.h
-echo "} evkey_name_to_code[] =" >> evkey_name_to_code.h
-echo "{" >> evkey_name_to_code.h
+echo "static const struct" >> event_name_to_code.h
+echo "{" >> event_name_to_code.h
+echo "    const char *name;" >> event_name_to_code.h
+echo "    __u16 type;" >> event_name_to_code.h
+echo "    __u16 code;" >> event_name_to_code.h
+echo "} event_name_to_code[] =" >> event_name_to_code.h
+echo "{" >> event_name_to_code.h
 ${AWK} "
     /#define SYN_/                {
                                     code_str = \"\\\"\" \$2 \"\\\"\";
@@ -98,8 +98,8 @@ ${AWK} "
                                     code_num = \$2;
                                     printf(\"    { %-25s , EV_SND , %-23s },\n\", code_str, code_num);
                                   };
-    " < ${ABSOLUTE_LINUX_INPUT_H} >> evkey_name_to_code.h
-echo "    { NULL                      , 0      , 0                       }," >> evkey_name_to_code.h
-echo "};" >> evkey_name_to_code.h
+    " < ${ABSOLUTE_LINUX_INPUT_H} >> event_name_to_code.h
+echo "    { NULL                      , 0      , 0                       }," >> event_name_to_code.h
+echo "};" >> event_name_to_code.h
 
-echo "#endif" >> evkey_name_to_code.h
+echo "#endif" >> event_name_to_code.h

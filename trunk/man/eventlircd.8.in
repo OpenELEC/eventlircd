@@ -1,4 +1,4 @@
-.\" Copyright (C) 2009 Paul Bender.
+.\" Copyright (C) 2009-2010 Paul Bender.
 .\"
 .\" This file is part of eventlircd.
 .\"
@@ -62,8 +62,8 @@ The more often it appears, the more verbose the message output.
 \fB\-f\fR \fB\-\-foreground\fR
 Run \fBeventlircd\fR in the foreground rather than in the background.
 .TP
-\fB\-k\fR \fB\-\-keymap=dir\fR
-Look for device keymap files in directory \fBdirectory\fR rather than directory @KEYMAP_DIR@.
+\fB\-k\fR \fB\-\-map=dir\fR
+Look for device map files in directory \fBdirectory\fR rather than directory @EVMAP_DIR@.
 .TP
 \fB\-s\fR \fB\-\-socket=socket\fR
 Create the lircd socket \fBsocket\fR rather than lircd socket @LIRCD_SOCKET@.
@@ -82,19 +82,19 @@ The following are the eventlircd specific udev device properties that can be set
 Used to ask \fBeventlircd\fR to handle the device.
 If the value is "true", then \fBeventlircd\fR will attempt to handle the device.
 .TP
-\fBeventlircd_keymap\fR
-Used to tell \fBeventlircd\fR the name of the keymap file to be used with this device.
+\fBeventlircd_evmap\fR
+Used to tell \fBeventlircd\fR the name of the map file to be used with this device.
 If it is not set, then \fBeventlircd\fR will not perform any key mapping.
-\fBeventlircd\fR assumes that the keymap file is located in the keymap directory. 
+\fBeventlircd\fR assumes that the map file is located in the map directory. 
 .TP
 \fBeventlircd_remote\fR
 Used to tell \fBeventlircd\fR the remote control name to use in the output \fBeventlircd\fR sends to the lircd socket.
 If it is not set, then \fBeventlircd\fR will use "devinput" for the remote control name.
 .SH FILES
-.I @KEYMAP_DIR@/*.keymap
+.I @EVMAP_DIR@/*.evmap
 .RS
 The per-device key map files.
-See \fBeventlircd.keymap (5)\fR for further details.
+See \fBeventlircd.evmap (5)\fR for further details.
 .RE
 .I @includedir@/linux/input.h
 .RS
@@ -138,4 +138,4 @@ All other Linux input event types and event codes are not supported.
 .SH AUTHOR
 Paul Bender
 .SH "SEE ALSO"
-.BR eventlircd.keymap (5)
+.BR eventlircd.evmap (5)

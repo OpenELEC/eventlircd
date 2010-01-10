@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Paul Bender.
+ * Copyright (C) 2009-2010 Paul Bender.
  *
  * This file is part of eventlircd.
  *
@@ -19,7 +19,7 @@
 #ifndef _LIRCUDEVD_INPUT_H_
 #define _LIRCUDEVD_INPUT_H_ 1
 
-int input_init(const char* keymap_dir);
+int input_init(const char* evmap_dir);
 int input_exit();
 
 #endif
