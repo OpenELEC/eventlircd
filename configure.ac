@@ -1,4 +1,4 @@
-dnl Copyright (C) 2009 Paul Bender.
+dnl Copyright (C) 2009-2010 Paul Bender.
 dnl
 dnl This file is part of eventlircd.
 dnl
@@ -94,16 +94,16 @@ AC_ARG_WITH(lircd-socket, AS_HELP_STRING([--with-lircd-socket=SOCKET], [lircd so
     [LIRCD_SOCKET="${localstatedir}/run/lirc/lircd"])
 AC_SUBST(LIRCD_SOCKET)
 
-AC_ARG_WITH(keymap-dir, AS_HELP_STRING([--with-keymap-dir=DIR], [key map directory @<:@SYSCONFDIR/eventlircd.d@:>@]),
-    [KEYMAP_DIR="$withval"],
-    [KEYMAP_DIR="${sysconfdir}/eventlircd.d"])
-AC_SUBST(KEYMAP_DIR)
+AC_ARG_WITH(evmap-dir, AS_HELP_STRING([--with-evmap-dir=DIR], [event map directory @<:@SYSCONFDIR/eventlircd.d@:>@]),
+    [EVMAP_DIR="$withval"],
+    [EVMAP_DIR="${sysconfdir}/eventlircd.d"])
+AC_SUBST(EVMAP_DIR)
 
-AC_ARG_WITH(udev-dir, AS_HELP_STRING([--with-udev-dir=DIR], [key map directory @<:@/lib/udev@:>@]),
+AC_ARG_WITH(udev-dir, AS_HELP_STRING([--with-udev-dir=DIR], [udev directory @<:@/lib/udev@:>@]),
     [UDEV_DIR="$withval"],
     [UDEV_DIR="/lib/udev"])
 AC_SUBST(UDEV_DIR)
 
 AC_CONFIG_HEADERS([src/config.h])
-AC_CONFIG_FILES([Makefile etc/Makefile man/Makefile man/eventlircd.8 man/eventlircd.keymap.5 src/Makefile src/evkey_code_to_name.h.sh src/evkey_name_to_code.h.sh src/evkey_type.h.sh udev/Makefile udev/lircd_helper udev/wakeup_enable udev/rules.d/98-lircd.rules.disabled udev/rules.d/98-eventlircd.rules.disabled])
+AC_CONFIG_FILES([Makefile etc/Makefile man/Makefile man/eventlircd.8 man/eventlircd.evmap.5 src/Makefile src/event_name_to_code.h.sh src/evkey_code_to_name.h.sh src/evkey_type.h.sh udev/Makefile udev/lircd_helper udev/wakeup_enable udev/rules.d/98-lircd.rules.disabled udev/rules.d/98-eventlircd.rules.disabled])
 AC_OUTPUT

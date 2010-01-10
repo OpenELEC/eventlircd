@@ -51,7 +51,7 @@ int main(int argc,char **argv)
         {"version",no_argument,NULL,'V'},
         {"verbose",no_argument,NULL,'v'},
         {"foreground",no_argument,NULL,'f'},
-        {"keymap",required_argument,NULL,'k'},
+        {"evmap",required_argument,NULL,'e'},
         {"socket",required_argument,NULL,'s'},
         {"mode",required_argument,NULL,'m'},
         {"release",required_argument,NULL,'r'},
@@ -60,7 +60,7 @@ int main(int argc,char **argv)
     const char *progname = NULL;
     int verbose = 0;
     bool foreground = false;
-    const char *input_device_keymap_dir = KEYMAP_DIR;
+    const char *input_device_evmap_dir = EVMAP_DIR;
     const char *lircd_socket_path = LIRCD_SOCKET;
     mode_t lircd_socket_mode = S_IWUSR | S_IRUSR | S_IWGRP | S_IRGRP | S_IWOTH | S_IROTH;
     const char *lircd_release_suffix = NULL;
@@ -70,7 +70,7 @@ int main(int argc,char **argv)
 
     openlog(progname, LOG_CONS | LOG_PERROR | LOG_PID, LOG_DAEMON);
 
-    while((opt = getopt_long(argc, argv, "hVvfk:s:m:r:", longopts, NULL)) != -1)
+    while((opt = getopt_long(argc, argv, "hVvfe:s:m:r:", longopts, NULL)) != -1)
     {
         switch(opt)
         {
@@ -80,7 +80,7 @@ int main(int argc,char **argv)
 		fprintf(stdout, "    -V --version           print the program version and exit\n");
 		fprintf(stdout, "    -v --verbose           increase the output message verbosity (-v, -vv or -vvv)\n");
 		fprintf(stdout, "    -f --foreground        run in the foreground\n");
-		fprintf(stdout, "    -k --keymap=<dir>      directory containing input device keymap files (default is '%s')\n", input_device_keymap_dir);
+		fprintf(stdout, "    -e --evmap=<dir>       directory containing input device event map files (default is '%s')\n", input_device_evmap_dir);
 		fprintf(stdout, "    -s --socket=<socket>   lircd socket (default is '%s')\n", lircd_socket_path);
 		fprintf(stdout, "    -m --mode=<mode>       lircd socket mode (default is '%04o')\n", lircd_socket_mode);
 		fprintf(stdout, "    -r --release=<suffix>  generate key release events suffixed with <suffix>\n");
@@ -101,8 +101,8 @@ int main(int argc,char **argv)
             case 'f':
                 foreground = true;
                 break;
-            case 'k':
-                input_device_keymap_dir = optarg;
+            case 'e':
+                input_device_evmap_dir = optarg;
                 break;
             case 's':
                 lircd_socket_path = optarg;
@@ -156,7 +156,7 @@ int main(int argc,char **argv)
         daemon(0, 0);
     }
 
-    if (input_init(input_device_keymap_dir) != 0)
+    if (input_init(input_device_evmap_dir) != 0)
     {
         monitor_exit();
         lircd_exit();
