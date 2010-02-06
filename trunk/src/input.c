@@ -1326,6 +1326,10 @@ static int input_device_add(struct udev_device *udev_device)
     int i;
     int j;
     bool output_active;
+    __u16 type;
+    __u16 code;
+    __u16 code_in;
+    __u16 code_out;
 
     if (udev_device == NULL)
     {
@@ -1688,8 +1692,8 @@ static int input_device_add(struct udev_device *udev_device)
                 case EV_KEY:
                     for (j = 0 ; j < KEY_MAX ; j++)
                     {
-                        __u16 type = i;
-                        __u16 code = j;
+                        type = i;
+                        code = j;
                         if (BITFIELD_TEST(code, bit_key) != 0)
                         {
                             /*
@@ -1756,8 +1760,8 @@ static int input_device_add(struct udev_device *udev_device)
                 case EV_REL:
                     for (j = 0 ; j < REL_MAX ; j++)
                     {
-                        __u16 type = i;
-                        __u16 code = j;
+                        type = i;
+                        code = j;
                         if (BITFIELD_TEST(code, bit_rel) != 0)
                         {
                             /*
@@ -1794,8 +1798,8 @@ static int input_device_add(struct udev_device *udev_device)
                 case EV_ABS:
                     for (j = 0 ; j < ABS_MAX ; j++)
                     {
-                        __u16 type = i;
-                        __u16 code = j;
+                        type = i;
+                        code = j;
                         if (BITFIELD_TEST(code, bit_abs) != 0)
                         {
                             /*
@@ -1868,8 +1872,8 @@ static int input_device_add(struct udev_device *udev_device)
     {
         for (i = 0 ; i < device->evmap_size ; i++)
         {
-            __u16 code_in  = device->evmap[i].code_in;
-            __u16 code_out = device->evmap[i].code_out;
+            code_in  = device->evmap[i].code_in;
+            code_out = device->evmap[i].code_out;
             /*
              * Skip keyboard shortcuts that map to NULL.
              */

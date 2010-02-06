@@ -72,6 +72,7 @@ struct
 static int lircd_client_add()
 {
     struct lircd_client *client;
+    int flags;
 
     if (eventlircd_lircd.fd == -1)
     {
@@ -93,7 +94,7 @@ static int lircd_client_add()
         return -1;
     }
 
-    int flags = fcntl(client->fd, F_GETFL);
+    flags = fcntl(client->fd, F_GETFL);
     fcntl(client->fd, F_SETFL, flags | O_NONBLOCK);
 
     client->next = eventlircd_lircd.client_list;
