@@ -201,7 +201,6 @@ int monitor_run()
     struct monitor_client *client;
     fd_set fdset;
     int nfds;
-    int fd;
 
     signal_action.sa_handler = monitor_sigterm_handler;
     sigfillset(&signal_action.sa_mask);

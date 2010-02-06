@@ -114,7 +114,7 @@ int main(int argc,char **argv)
                 lircd_release_suffix = optarg;
                 break;
             default:
-                fprintf(stderr, "error: unknown option: %s\n", opt);
+                fprintf(stderr, "error: unknown option: %c\n", opt);
                 exit(EX_USAGE);
         }
     }

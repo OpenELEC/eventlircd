@@ -690,7 +690,7 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
         if ((device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_CODE_MASK) == 0)
         {
             syslog(LOG_WARNING, "%s:%d:<name-in>: no key in keyboard shortcut.\n",
-                   evmap_path, line_number, name_in_part);
+                   evmap_path, line_number);
             evmap_valid = false;
             continue;
         }
@@ -751,8 +751,6 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
 
 static int input_device_evmap_run(struct input_device *device)
 {
-    int i;
-    int j;
     struct input_device_evmap search;
     struct input_device_evmap *result;
 
@@ -801,7 +799,6 @@ static int input_device_event_update(struct input_device *device, const struct i
 {
     struct input_device_event *previous;
     long time_delta;
-    int i;
 
     if (device == NULL)
     {
@@ -846,21 +843,21 @@ static int input_device_event_update(struct input_device *device, const struct i
         {
             case LED_CAPSL:
                 if (device->current.event_in.value == 0) device->lock_state &= ~LIRCUDEVD_EVMAP_LOCK_CAPS;
-                else                                     device->lock_state !=  LIRCUDEVD_EVMAP_LOCK_CAPS;
+                else                                     device->lock_state |=  LIRCUDEVD_EVMAP_LOCK_CAPS;
                 device->current.event_out.type = LIRCUDEVD_EV_NULL;
                 device->current.repeat_count = 0;
                 return 0;
                 break;
             case LED_NUML:
                 if (device->current.event_in.value == 0) device->lock_state &= ~LIRCUDEVD_EVMAP_LOCK_NUM;
-                else                                     device->lock_state !=  LIRCUDEVD_EVMAP_LOCK_NUM;
+                else                                     device->lock_state |=  LIRCUDEVD_EVMAP_LOCK_NUM;
                 device->current.event_out.type = LIRCUDEVD_EV_NULL;
                 device->current.repeat_count = 0;
                 return 0;
                 break;
             case LED_SCROLLL:
                 if (device->current.event_in.value == 0) device->lock_state &= ~LIRCUDEVD_EVMAP_LOCK_SCROLL;
-                else                                     device->lock_state !=  LIRCUDEVD_EVMAP_LOCK_SCROLL;
+                else                                     device->lock_state |=  LIRCUDEVD_EVMAP_LOCK_SCROLL;
                 device->current.event_out.type = LIRCUDEVD_EV_NULL;
                 device->current.repeat_count = 0;
                 return 0;
@@ -1326,11 +1323,8 @@ static int input_device_add(struct udev_device *udev_device)
     unsigned long bit_snd[BITFIELD_LONGS_PER_ARRAY(SND_MAX)];
     unsigned long bit_ff[BITFIELD_LONGS_PER_ARRAY(FF_MAX)];
     unsigned long bit_ff_status[BITFIELD_LONGS_PER_ARRAY(FF_STATUS_MAX)];
-    __u16 type;
-    uint32_t code;
     int i;
     int j;
-    int k;
     bool output_active;
 
     if (udev_device == NULL)
@@ -1595,7 +1589,7 @@ static int input_device_add(struct udev_device *udev_device)
                 default:
                     syslog(LOG_DEBUG,
                            "input device %s: events of unsupported event type 0x%02x will be discarded\n",
-                           device->path, type);
+                           device->path, i);
                     break;
             }
         }
@@ -1835,8 +1829,8 @@ static int input_device_add(struct udev_device *udev_device)
                             if (ioctl(device->fd, EVIOCGABS(code), &absinfo) < 0)
                             {
                                 syslog(LOG_ERR,
-                                       "input event %s: failed to get ABS information for 0x%02x of output event device: %s\n",
-                                       code, device->path, strerror(errno));
+                                       "input device %s: failed to get ABS information for 0x%02x of output event device: %s\n",
+                                       device->path, code, strerror(errno));
                             }
                             else
                             {
@@ -1945,7 +1939,7 @@ static int input_device_add(struct udev_device *udev_device)
                 {
                     syslog(LOG_ERR,
                            "input device %s: failed to set UI_SET_KEYBIT 0x%02x for output event device: %s\n",
-                           code_out, device->path, strerror(errno));
+                           device->path, code_out, strerror(errno));
                 }
                 output_active = true;
             }
@@ -2005,17 +1999,17 @@ static int input_device_add(struct udev_device *udev_device)
         if (device->led.capslock == true)
         {
             if (((bit[LED_CAPSL/8] >> (LED_CAPSL%8)) & 0x1) == 0) device->lock_state &= ~LIRCUDEVD_EVMAP_LOCK_CAPS;
-            else                                                  device->lock_state !=  LIRCUDEVD_EVMAP_LOCK_CAPS;
+            else                                                  device->lock_state |=  LIRCUDEVD_EVMAP_LOCK_CAPS;
         }
         if (device->led.numlock == true)
         {
             if (((bit[LED_NUML/8] >> (LED_NUML%8)) & 0x1) == 0) device->lock_state &= ~LIRCUDEVD_EVMAP_LOCK_NUM;
-            else                                                device->lock_state !=  LIRCUDEVD_EVMAP_LOCK_NUM;
+            else                                                device->lock_state |=  LIRCUDEVD_EVMAP_LOCK_NUM;
         }
         if (device->led.scrolllock == true)
         {
             if (((bit[LED_SCROLLL/8] >> (LED_SCROLLL%8)) & 0x1) == 0) device->lock_state &= ~LIRCUDEVD_EVMAP_LOCK_SCROLL;
-            else                                                      device->lock_state !=  LIRCUDEVD_EVMAP_LOCK_SCROLL;
+            else                                                      device->lock_state |=  LIRCUDEVD_EVMAP_LOCK_SCROLL;
         }
     }
 
@@ -2129,7 +2123,6 @@ int input_init(const char *evmap_dir)
     struct udev_list_entry *device;
     const char *syspath;
     struct udev_device *udev_device;
-    const char *name;
 
     eventlircd_input.evmap_dir = NULL;
     eventlircd_input.udev.fd = -1;
