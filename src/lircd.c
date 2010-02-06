@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Paul Bender.
+ * Copyright (C) 2009-2010 Paul Bender.
  *
  * This file is part of eventlircd.
  *
