@@ -79,7 +79,7 @@ static int lircd_client_add()
         return -1;
     }
 
-    if ((client = malloc(sizeof(struct lircd_client))) == NULL)
+    if ((client = (struct lircd_client *)malloc(sizeof(struct lircd_client))) == NULL)
     {
         syslog(LOG_ERR, "failed to allocate memory for lircd client: %s\n", strerror(errno));
         return -1;

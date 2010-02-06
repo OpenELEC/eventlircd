@@ -140,7 +140,7 @@ int monitor_client_add(int fd, int (*handler)(void *id), void *id)
         return -1;
     }
 
-    if ((client = malloc(sizeof(struct monitor_client))) == NULL)
+    if ((client = (struct monitor_client *)malloc(sizeof(struct monitor_client))) == NULL)
     {
         syslog(LOG_ERR, "failed to allocate memory for monitor client: %s\n", strerror(errno));
         return -1;
