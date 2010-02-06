@@ -253,7 +253,7 @@ static int input_device_previous_push(struct input_device *device)
      */
     input_device_previous_pop(device);
 
-    if ((previous = malloc(sizeof(struct input_device_event))) == NULL)
+    if ((previous = (struct input_device_event *)malloc(sizeof(struct input_device_event))) == NULL)
     {
         syslog(LOG_ERR, "failed to allocate memory for previous input device event: %s\n", strerror(errno));
         return -1;
@@ -419,7 +419,7 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
     /*
      * Allocate memory for the event map table.
      */
-    if ((device->evmap = malloc(device->evmap_size * sizeof(struct input_device_evmap))) == NULL)
+    if ((device->evmap = (struct input_device_evmap *)malloc(device->evmap_size * sizeof(struct input_device_evmap))) == NULL)
     {
         syslog(LOG_ERR, "failed to allocate memory for the input device map %s: %s\n", evmap_path, strerror(errno));
         device->evmap_size = 0;
