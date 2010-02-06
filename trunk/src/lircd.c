@@ -216,7 +216,7 @@ int lircd_init(const char *path, mode_t mode, const char *release_suffix)
     if (strnlen(path, PATH_MAX + 1) >= PATH_MAX + 1)
     {
         errno = ENAMETOOLONG;
-        syslog(LOG_ERR, "lircd socket path: %s\n", PATH_MAX + 1, strerror(errno));
+        syslog(LOG_ERR, "lircd socket path: %s\n", strerror(errno));
         return -1;
     }
 
