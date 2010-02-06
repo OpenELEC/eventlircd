@@ -339,7 +339,7 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
     char evmap_path[PATH_MAX + 1];
     FILE *fp;
     char *line;
-    int line_len;
+    size_t line_len;
     int line_number;
     int evmap_index;
 
