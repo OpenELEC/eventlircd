@@ -342,6 +342,13 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
     size_t line_len;
     int line_number;
     int evmap_index;
+    char *comment;
+    char name_in[128];
+    char name_out[128];
+    char *name_in_part;
+    char *name_in_part_state;
+    bool evmap_valid;
+    int i;
 
     if (device == NULL)
     {
@@ -432,14 +439,6 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
     evmap_index = 0;
     while ((evmap_index < device->evmap_size) && (getline(&line, &line_len, fp) >= 0))
     {
-        char *comment;
-        char name_in[128];
-        char name_out[128];
-        char *name_in_part;
-        char *name_in_part_state;
-        bool evmap_valid;
-        int i;
-
         device->evmap[evmap_index].code_in  = 0;
         device->evmap[evmap_index].code_out = 0;
 
