@@ -110,7 +110,7 @@ struct input_device_event
 {
     struct input_event event_in;        /* The input event. */
     struct input_event event_out;       /* The output event corresponding to the input event. */
-    int repeat_count;                   /* The number of times the output key event has been repeated. */
+    unsigned int repeat_count;          /* The number of times the output key event has been repeated. */
     struct input_device_event *next;    /* Pointer to the next input device event. */
 };
 
@@ -140,7 +140,7 @@ struct input_device
     int fd;                             /* The input device's file descriptor. */
     char *path;                         /* The input device's path in the device file system. */
     struct input_device_evmap *evmap;   /* The input device's event map table. */
-    int evmap_size;                     /* The input device's event map table size. */
+    size_t evmap_size;                  /* The input device's event map table size. */
     uint32_t lock_state;                /* The input device's current lock key state. */
     uint32_t modifier_state;            /* The input device's current modifier key state. */
     struct input_device_event current;  /* The input device's current event. */
@@ -340,15 +340,15 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
     FILE *fp;
     char *line;
     size_t line_len;
-    int line_number;
-    int evmap_index;
+    unsigned int line_number;
+    size_t evmap_index;
     char *comment;
     char name_in[128];
     char name_out[128];
     char *name_in_part;
     char *name_in_part_state;
     bool evmap_valid;
-    int i;
+    size_t i;
 
     if (device == NULL)
     {
@@ -1322,8 +1322,8 @@ static int input_device_add(struct udev_device *udev_device)
     unsigned long bit_snd[BITFIELD_LONGS_PER_ARRAY(SND_MAX)];
     unsigned long bit_ff[BITFIELD_LONGS_PER_ARRAY(FF_MAX)];
     unsigned long bit_ff_status[BITFIELD_LONGS_PER_ARRAY(FF_STATUS_MAX)];
-    int i;
-    int j;
+    size_t i;
+    size_t j;
     bool output_active;
     __u16 type;
     __u16 code;

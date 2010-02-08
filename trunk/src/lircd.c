@@ -286,7 +286,7 @@ int lircd_init(const char *path, mode_t mode, const char *release_suffix)
     return 0;
 }
 
-int lircd_send(const struct input_event *event, const char *name, int repeat_count, const char *remote)
+int lircd_send(const struct input_event *event, const char *name, unsigned int repeat_count, const char *remote)
 {
     char message[1000];
     int message_len;
@@ -298,11 +298,6 @@ int lircd_send(const struct input_event *event, const char *name, int repeat_cou
         return -1;
     }
     if (name == NULL)
-    {
-        errno = EINVAL;
-        return -1;
-    }
-    if (repeat_count < 0)
     {
         errno = EINVAL;
         return -1;

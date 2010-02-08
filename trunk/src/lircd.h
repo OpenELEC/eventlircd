@@ -30,6 +30,6 @@
 
 int lircd_init(const char *path, mode_t mode, const char *release_suffix);
 int lircd_exit();
-int lircd_send(const struct input_event *event, const char *name, int repeat_count, const char *remote);
+int lircd_send(const struct input_event *event, const char *name, unsigned int repeat_count, const char *remote);
 
 #endif
