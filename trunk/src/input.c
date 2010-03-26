@@ -1067,14 +1067,12 @@ static int input_device_event_update(struct input_device *device, const struct i
             {
                 time_delta = 1000000 * (device->current.event_out.time.tv_sec  - previous->event_out.time.tv_sec ) +
                                        (device->current.event_out.time.tv_usec - previous->event_out.time.tv_usec);
-                if      ((previous->repeat_count == 0) && (time_delta < 500000))
-                {
-                    memset(&(device->current.event_out), 0, sizeof(struct input_event));
-                    device->current.event_out.type = LIRCUDEVD_EV_NULL;
-                    device->current.repeat_count = 0;
-                    return 0;
-                }
-                else if ((previous->repeat_count >= 1) && (time_delta <  50000))
+                if (((previous->repeat_count == 0) && (time_delta <  900000)) ||
+                    ((previous->repeat_count == 1) && (time_delta <  500000)) ||
+                    ((previous->repeat_count == 2) && (time_delta <  300000)) ||
+                    ((previous->repeat_count == 3) && (time_delta <  200000)) ||
+                    ((previous->repeat_count == 4) && (time_delta <  150000)) ||
+                    ((previous->repeat_count >= 5) && (time_delta <  100000)))
                 {
                     memset(&(device->current.event_out), 0, sizeof(struct input_event));
                     device->current.event_out.type = LIRCUDEVD_EV_NULL;
