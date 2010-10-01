@@ -445,7 +445,7 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
         line_number++;
 
         /*
-         * End the line at the first comment character
+         * End the line at the first comment character.
          */
         comment = strchr(line, '#');
         if (comment != NULL)
@@ -1159,7 +1159,7 @@ static int input_device_handler(void *id)
 
     /* 
      * Send keys to lircd and send all other events to the output device
-     * (assuming it exists)
+     * (assuming it exists).
      */
     if (input_device_event_is_key(device) == true)
     {

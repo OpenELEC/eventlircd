@@ -10,14 +10,14 @@ The software's architecture is straight forward. At the center is monitor, which
 monitors a list of file descriptors and calls the file descriptor's handler when
 the file descriptor is "ready". Initially, lircd creates an lircd socket and
 adds it to monitor's file descriptor list so that it can watch for lircd client
-connection requests, and input creates a udev monitor adds it to monitor's file
-descriptor list so that it can watch for input event devices. When lircd detects
-an lircd client connect request, it connects the client and adds it to its
-client list so that it can send lircd messages to the client. When input detects
-an input event device that is to be handled by eventlircd, it opens the input
-device, creates a corresponding mouse/joystick event device (if needed) and
-adds the input device to monitor's file descriptor list so that it can watch for
-events. When input detects an event on one of its input devices, it performs the
-key mapping and sends the resulting mapped event to either the lircd clients or
-the input device's mouse/joystick event device depending on whether the mapped
-event is a keyboard or mouse/joystick event.
+connection requests, and input creates a udev monitor and adds it to monitor's
+file descriptor list so that it can watch for input event devices. When lircd
+detects an lircd client connect request, it connects the client and adds it to
+its client list so that it can send lircd messages to the client. When input
+detects an input event device that is to be handled by eventlircd, it opens the
+input device, creates a corresponding mouse/joystick event device (if needed)
+and adds the input device to monitor's file descriptor list so that it can watch
+for events. When input detects an event on one of its input devices, it performs
+the key mapping and sends the resulting mapped event to either the lircd clients
+or the input device's mouse/joystick event device depending on whether the
+mapped event is a keyboard or mouse/joystick event.
