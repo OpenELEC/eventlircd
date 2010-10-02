@@ -28,8 +28,8 @@ GREP=@GREP@
 
 rm -f evkey_code_to_name.h
 
-echo "#ifndef _LIRCUDEVD_EVKEY_CODE_TO_NAME_H_" >> evkey_code_to_name.h
-echo "#define _LIRCUDEVD_EVKEY_CODE_TO_NAME_H_ 1" >> evkey_code_to_name.h
+echo "#ifndef _EVENTLIRCD_EVKEY_CODE_TO_NAME_H_" >> evkey_code_to_name.h
+echo "#define _EVENTLIRCD_EVKEY_CODE_TO_NAME_H_ 1" >> evkey_code_to_name.h
 
 echo "#include <${ABSOLUTE_LINUX_INPUT_H}>" >> evkey_code_to_name.h
 
