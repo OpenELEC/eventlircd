@@ -55,6 +55,19 @@
 #include "lircd.h"
 #include "monitor.h"
 
+/*
+ * The lircd_handler does not use the id parameter, so we need to let gcc's
+ * -Wused know that it is ok.
+ */
+#ifdef UNUSED
+#elif defined(__GNUC__)
+# define UNUSED(x) UNUSED_ ## x __attribute__((unused))
+#elif defined(__LCLINT__)
+# define UNUSED(x) /*@unused@*/ x
+#else
+# define UNUSED(x) x
+#endif
+
 #define DEVICE_NAME    "eventlircd"
 #define DEVICE_BUSTYPE 0
 #define DEVICE_VENDOR  0
@@ -182,8 +195,11 @@ struct
 } eventlircd_input =
 {
     .evmap_dir = NULL,
-    .udev.fd = -1,
-    .udev.monitor = NULL,
+    .udev =
+    {
+        .fd = -1,
+        .monitor = NULL
+    },
     .device_list = NULL
 };
 
@@ -2026,7 +2042,7 @@ static int input_device_add(struct udev_device *udev_device)
     return 0;
 }
 
-static int input_handler(void *id)
+static int input_handler(void* UNUSED(id))
 {
     struct udev_device *udev_device;
     const char *action;

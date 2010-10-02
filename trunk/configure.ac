@@ -42,6 +42,10 @@ AC_PROG_GREP
 AC_PROG_SED
 AC_PROG_INSTALL
 
+if ! ${AWK} --non-decimal-data "" > /dev/null 2>&1 ; then
+    AC_MSG_ERROR([${AWK} does not support the command line argument '--non-decimal-data'])
+fi
+
 PKG_PROG_PKG_CONFIG
 
 AC_HEADER_STDC
@@ -105,18 +109,22 @@ AC_ARG_WITH(udev-dir, AS_HELP_STRING([--with-udev-dir=DIR], [udev directory @<:@
     [UDEV_DIR="/lib/udev"])
 AC_SUBST(UDEV_DIR)
 
-AX_CFLAGS_GCC_OPTION([-O2], [CFLAGS], [CFLAGS="-O2 $CFLAGS"], [])
-AX_CFLAGS_GCC_OPTION([-pedantic], [CFLAGS], [CFLAGS="-pedantic $CFLAGS"], [])
-AX_CFLAGS_GCC_OPTION([-Wall], [CFLAGS], [CFLAGS="-Wall $CFLAGS"], [])
-AX_CFLAGS_GCC_OPTION([-Werror], [CFLAGS], [CFLAGS="-Werror $CFLAGS"], [])
-AX_CFLAGS_GCC_OPTION([-fvisibility=hidden], [CFLAGS], [CFLAGS="-fvisibility=hidden $CFLAGS"], [])
-AX_CFLAGS_GCC_OPTION([-flto], [CFLAGS], [CFLAGS="-flto $CFLAGS"], [])
-AX_LD_CHECK_FLAG([-fuse-ld=gold],[],[],[LDFLAGS="-fuse-ld=gold $LDFLAGS"],[])
-AX_LD_CHECK_FLAG([-Wl,--as-needed],[],[],[LDFLAGS="-Wl,--as-needed $LDFLAGS"],[])
-AX_LD_CHECK_FLAG([-fvisibility=hidden],[],[],[LDFLAGS="-fvisibility=hidden $LDFLAGS"],[])
-AX_LD_CHECK_FLAG([-flto],[],[],[LDFLAGS="-flto $LDFLAGS"],[])
-AX_LD_CHECK_FLAG([-fuse-linker-plugin],[],[],[LDFLAGS="-fuse-linker-plugin $LDFLAGS"],[])
-AX_LD_CHECK_FLAG([-fwhole-program],[],[],[LDFLAGS="-fwhole-program $LDFLAGS"],[])
+if ! echo " ${CC} ${CFLAGS} " | ${GREP} ' -O@<:@^ @:>@* ' > /dev/null ; then
+    AX_C_CHECK_FLAG([-O2],[],[],[CFLAGS="$CFLAGS -O2"],[])
+fi
+AX_C_CHECK_FLAG([-pedantic],[],[],[CFLAGS="$CFLAGS -pedantic"],[])
+AX_C_CHECK_FLAG([-flto],[],[],[CFLAGS="$CFLAGS -flto"],[])
+AX_C_CHECK_FLAG([-fvisibility=hidden],[],[],[CFLAGS="$CFLAGS -fvisibility=hidden"],[])
+AX_C_CHECK_FLAG([-Werror],[],[],[CFLAGS="$CFLAGS -Werror"],[])
+AX_C_CHECK_FLAG([-Wall],[],[],[CFLAGS="$CFLAGS -Wall"],[])
+AX_C_CHECK_FLAG([-Wextra],[],[],[CFLAGS="$CFLAGS -Wextra"],[])
+AX_C_CHECK_FLAG([-Winit-self],[],[],[CFLAGS="$CFLAGS -Winit-self"],[])
+AX_LD_CHECK_FLAG([-flto],[],[],[LDFLAGS="$LDFLAGS -flto"],[])
+AX_LD_CHECK_FLAG([-fuse-ld=gold],[],[],[LDFLAGS="$LDFLAGS -fuse-ld=gold"],[])
+AX_LD_CHECK_FLAG([-fuse-linker-plugin],[],[],[LDFLAGS="$LDFLAGS -fuse-linker-plugin"],[])
+AX_LD_CHECK_FLAG([-fwhole-program],[],[],[LDFLAGS="$LDFLAGS -fwhole-program"],[])
+AX_LD_CHECK_FLAG([-fvisibility=hidden],[],[],[LDFLAGS="$LDFLAGS -fvisibility=hidden"],[])
+AX_LD_CHECK_FLAG([-Wl,--as-needed],[],[],[LDFLAGS="$LDFLAGS -Wl,--as-needed"],[])
 
 AC_CONFIG_HEADERS([src/config.h])
 AC_CONFIG_FILES([Makefile etc/Makefile man/Makefile man/eventlircd.8 man/eventlircd.evmap.5 src/Makefile src/event_name_to_code.h.sh src/evkey_code_to_name.h.sh src/evkey_type.h.sh udev/Makefile udev/lircd_helper udev/wakeup_enable udev/rules.d/98-lircd.rules.disabled udev/rules.d/98-eventlircd.rules.disabled])
