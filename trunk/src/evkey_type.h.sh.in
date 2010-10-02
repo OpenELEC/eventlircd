@@ -24,23 +24,19 @@
 
 ABSOLUTE_LINUX_INPUT_H=@ABSOLUTE_LINUX_INPUT_H@
 AWK=@AWK@
-GREP=@GREP@
 
 rm -f evkey_type.h
 
-echo "#ifndef _EVENTLIRCD_EVKEY_TYPE_H_" >> evkey_type.h
-echo "#define _EVENTLIRCD_EVKEY_TYPE_H_ 1" >> evkey_type.h
-
-echo "#include <${ABSOLUTE_LINUX_INPUT_H}>" >> evkey_type.h
-
-echo "#define EVENTLIRCD_EVKEY_TYPE_NULL 0" >> evkey_type.h
-echo "#define EVENTLIRCD_EVKEY_TYPE_KEY  1" >> evkey_type.h
-echo "#define EVENTLIRCD_EVKEY_TYPE_BTN  2" >> evkey_type.h
-
-echo "static const int evkey_type[KEY_MAX] =" >> evkey_type.h
-echo "{" >> evkey_type.h
 ${AWK} --non-decimal-data "
     BEGIN {
+      printf(\"#ifndef _EVENTLIRCD_EVKEY_TYPE_H_\n\");
+      printf(\"#define _EVENTLIRCD_EVKEY_TYPE_H_ 1\n\");
+      printf(\"#include <${ABSOLUTE_LINUX_INPUT_H}>\n\");
+      printf(\"#define EVENTLIRCD_EVKEY_TYPE_NULL 0\n\");
+      printf(\"#define EVENTLIRCD_EVKEY_TYPE_KEY  1\n\");
+      printf(\"#define EVENTLIRCD_EVKEY_TYPE_BTN  2\n\");
+      printf(\"static const int evkey_type[KEY_MAX] =\n\");
+      printf(\"{\");
       code_cur = -1;
     };
     /#define KEY_CNT/             { next; };
@@ -59,7 +55,8 @@ ${AWK} --non-decimal-data "
                                       code_cur = \$3;
                                     };
                                   };
+    END {
+      printf(\"};\n\");
+      printf(\"#endif\n\");
+    };
 " < ${ABSOLUTE_LINUX_INPUT_H} >> evkey_type.h
-echo "};" >> evkey_type.h
-
-echo "#endif" >> evkey_type.h

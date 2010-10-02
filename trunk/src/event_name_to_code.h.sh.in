@@ -24,24 +24,23 @@
 
 ABSOLUTE_LINUX_INPUT_H=@ABSOLUTE_LINUX_INPUT_H@
 AWK=@AWK@
-GREP=@GREP@
 
 rm -f event_name_to_code.h
 
-echo "#ifndef _EVENTLIRCD_EVENT_NAME_TO_CODE_H_" >> event_name_to_code.h
-echo "#define _EVENTLIRCD_EVENT_NAME_TO_CODE_H_ 1" >> event_name_to_code.h
-
-echo "#include <${ABSOLUTE_LINUX_INPUT_H}>" >> event_name_to_code.h
-echo "#include <linux/types.h>" >> event_name_to_code.h
-
-echo "static const struct" >> event_name_to_code.h
-echo "{" >> event_name_to_code.h
-echo "    const char *name;" >> event_name_to_code.h
-echo "    __u16 type;" >> event_name_to_code.h
-echo "    __u16 code;" >> event_name_to_code.h
-echo "} event_name_to_code[] =" >> event_name_to_code.h
-echo "{" >> event_name_to_code.h
 ${AWK} "
+    BEGIN {
+      printf(\"#ifndef _EVENTLIRCD_EVENT_NAME_TO_CODE_H_\n\");
+      printf(\"#define _EVENTLIRCD_EVENT_NAME_TO_CODE_H_ 1\n\");
+      printf(\"#include <${ABSOLUTE_LINUX_INPUT_H}>\n\");
+      printf(\"#include <linux/types.h>\n\");
+      printf(\"static const struct\n\");
+      printf(\"{\n\");
+      printf(\"    const char *name;\n\");
+      printf(\"    __u16 type;\n\");
+      printf(\"    __u16 code;\n\");
+      printf(\"} event_name_to_code[] =\n\");
+      printf(\"{\n\");
+    };
     /#define SYN_/                {
                                     code_str = \"\\\"\" \$2 \"\\\"\";
                                     code_num = \$2;
@@ -103,8 +102,9 @@ ${AWK} "
                                     code_num = \$2;
                                     printf(\"    { %-25s , EV_SND , %-23s },\n\", code_str, code_num);
                                   };
+    END {
+      printf(\"    { NULL                      , 0      , 0                       },\n\");
+      printf(\"};\n\");
+      printf(\"#endif\n\");
+    };
     " < ${ABSOLUTE_LINUX_INPUT_H} >> event_name_to_code.h
-echo "    { NULL                      , 0      , 0                       }," >> event_name_to_code.h
-echo "};" >> event_name_to_code.h
-
-echo "#endif" >> event_name_to_code.h

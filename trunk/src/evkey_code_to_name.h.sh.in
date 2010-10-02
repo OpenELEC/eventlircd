@@ -24,19 +24,16 @@
 
 ABSOLUTE_LINUX_INPUT_H=@ABSOLUTE_LINUX_INPUT_H@
 AWK=@AWK@
-GREP=@GREP@
 
 rm -f evkey_code_to_name.h
 
-echo "#ifndef _EVENTLIRCD_EVKEY_CODE_TO_NAME_H_" >> evkey_code_to_name.h
-echo "#define _EVENTLIRCD_EVKEY_CODE_TO_NAME_H_ 1" >> evkey_code_to_name.h
-
-echo "#include <${ABSOLUTE_LINUX_INPUT_H}>" >> evkey_code_to_name.h
-
-echo "static const char *evkey_code_to_name[KEY_MAX] =" >> evkey_code_to_name.h
-echo "{" >> evkey_code_to_name.h
 ${AWK} --non-decimal-data "
     BEGIN {
+      printf(\"#ifndef _EVENTLIRCD_EVKEY_CODE_TO_NAME_H_\n\");
+      printf(\"#define _EVENTLIRCD_EVKEY_CODE_TO_NAME_H_ 1\n\");
+      printf(\"#include <${ABSOLUTE_LINUX_INPUT_H}>\n\");
+      printf(\"static const char *evkey_code_to_name[KEY_MAX] =\n\");
+      printf(\"{\n\");
       code_cur = -1;
     };
     /#define KEY_CNT/             { next; };
@@ -55,7 +52,8 @@ ${AWK} --non-decimal-data "
                                       code_cur = \$3;
                                     };
                                   };
+    END {
+      printf(\"};\n\");
+      printf(\"#endif\n\");
+    }
     " < ${ABSOLUTE_LINUX_INPUT_H} >> evkey_code_to_name.h
-echo "};" >> evkey_code_to_name.h
-
-echo "#endif" >> evkey_code_to_name.h
