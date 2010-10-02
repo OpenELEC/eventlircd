@@ -35,16 +35,25 @@ echo "#include <${ABSOLUTE_LINUX_INPUT_H}>" >> evkey_code_to_name.h
 
 echo "static const char *evkey_code_to_name[KEY_MAX] =" >> evkey_code_to_name.h
 echo "{" >> evkey_code_to_name.h
-${AWK} "
+${AWK} --non-decimal-data "
+    BEGIN {
+      code_cur = -1;
+    };
     /#define KEY_CNT/             { next; };
     /#define KEY_MAX/             { next; };
     /#define KEY_MIN_INTERESTING/ { next; };
     /#define KEY_RESERVED/        { next; };
     /#define KEY_/                {
-                                    printf(\"    [ %-20s ] = \\\"%s\\\",\n\", \$2, \$2);
+                                    if ((\$3 == \$3 + 0) && (\$3 > code_cur)) {
+                                      printf(\"    [ %-20s ] = \\\"%s\\\",\n\", \$2, \$2);
+                                      code_cur = \$3;
+                                    };
                                   };
     /#define BTN_/                {
-                                    printf(\"    [ %-20s ] = \\\"%s\\\",\n\", \$2, \$2);
+                                    if ((\$3 == \$3 + 0) && (\$3 > code_cur)) {
+                                      printf(\"    [ %-20s ] = \\\"%s\\\",\n\", \$2, \$2);
+                                      code_cur = \$3;
+                                    };
                                   };
     " < ${ABSOLUTE_LINUX_INPUT_H} >> evkey_code_to_name.h
 echo "};" >> evkey_code_to_name.h

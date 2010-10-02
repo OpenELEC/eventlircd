@@ -42,6 +42,19 @@
 #include "monitor.h"
 
 /*
+ * The lircd_handler does not use the id parameter, so we need to let gcc's
+ * -Wused know that it is ok.
+ */
+#ifdef UNUSED
+#elif defined(__GNUC__)
+# define UNUSED(x) UNUSED_ ## x __attribute__((unused))
+#elif defined(__LCLINT__)
+# define UNUSED(x) /*@unused@*/ x
+#else
+# define UNUSED(x) x
+#endif
+
+/*
  * The 'lircd' structure contains the information associated with the lircd
  * socket. In particular, it contains a linked list of 'lircd_client'
  * structures, each of which contains information associated with one connected
@@ -103,7 +116,7 @@ static int lircd_client_add()
     return 0;
 }
 
-static int lircd_handler(void *id)
+static int lircd_handler(void* UNUSED(id))
 {
     if (lircd_client_add() != 0)
     {
