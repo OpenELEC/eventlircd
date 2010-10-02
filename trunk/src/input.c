@@ -296,7 +296,7 @@ static int input_device_send(struct input_device *device, const struct input_eve
     {
         if (write(device->output.fd, event, sizeof(*event)) != sizeof(*event))
         {
-            syslog(LOG_ERR, "failed to send event (%u %u %s) for %s: %s\n", (unsigned int)event->type, (unsigned int)event->code, (int)event->value, device->output.dev.name, strerror(errno));
+            syslog(LOG_ERR, "failed to send event (%u %u %d) for %s: %s\n", (unsigned int)event->type, (unsigned int)event->code, (int)event->value, device->output.dev.name, strerror(errno));
             return -1;
         }
         device->output.syn_report = true;
