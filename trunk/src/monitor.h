@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with eventlircd.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _LIRCUDEVD_MONITOR_H_
-#define _LIRCUDEVD_MONITOR_H_ 1
+#ifndef _EVENTLIRCD_MONITOR_H_
+#define _EVENTLIRCD_MONITOR_H_ 1
 
 int monitor_init();
 int monitor_exit();

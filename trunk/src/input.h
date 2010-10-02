@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with eventlircd.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _LIRCUDEVD_INPUT_H_
-#define _LIRCUDEVD_INPUT_H_ 1
+#ifndef _EVENTLIRCD_INPUT_H_
+#define _EVENTLIRCD_INPUT_H_ 1
 
 int input_init(const char* evmap_dir);
 int input_exit();

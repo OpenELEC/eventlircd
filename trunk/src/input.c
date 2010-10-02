@@ -74,31 +74,31 @@
 #define DEVICE_PRODUCT 0
 #define DEVICE_VERSION 0
 
-#define LIRCUDEVD_EVMAP_LOCK_OFFSET (28)
-#define LIRCUDEVD_EVMAP_LOCK_MASK   ((0x7     ) << LIRCUDEVD_EVMAP_LOCK_OFFSET)
-#define LIRCUDEVD_EVMAP_LOCK_CAPS   ((0x1 << 2) << LIRCUDEVD_EVMAP_LOCK_OFFSET)
-#define LIRCUDEVD_EVMAP_LOCK_NUM    ((0x1 << 1) << LIRCUDEVD_EVMAP_LOCK_OFFSET)
-#define LIRCUDEVD_EVMAP_LOCK_SCROLL ((0x1 << 0) << LIRCUDEVD_EVMAP_LOCK_OFFSET)
-#define LIRCUDEVD_EVMAP_MOD_OFFSET  (24)
-#define LIRCUDEVD_EVMAP_MOD_MASK    ((0xf     ) << LIRCUDEVD_EVMAP_MOD_OFFSET)
-#define LIRCUDEVD_EVMAP_MOD_CTRL    ((0x1 << 3) << LIRCUDEVD_EVMAP_MOD_OFFSET)
-#define LIRCUDEVD_EVMAP_MOD_SHIFT   ((0x1 << 2) << LIRCUDEVD_EVMAP_MOD_OFFSET)
-#define LIRCUDEVD_EVMAP_MOD_ALT     ((0x1 << 1) << LIRCUDEVD_EVMAP_MOD_OFFSET)
-#define LIRCUDEVD_EVMAP_MOD_META    ((0x1 << 0) << LIRCUDEVD_EVMAP_MOD_OFFSET)
-#define LIRCUDEVD_EVMAP_TYPE_OFFSET (16)
-#define LIRCUDEVD_EVMAP_TYPE_MASK   ((0xff    ) << LIRCUDEVD_EVMAP_TYPE_OFFSET)
-#define LIRCUDEVD_EVMAP_CODE_OFFSET (0)
-#define LIRCUDEVD_EVMAP_CODE_MASK   ((0xffff  ) << LIRCUDEVD_EVMAP_CODE_OFFSET)
+#define EVENTLIRCD_EVMAP_LOCK_OFFSET (28)
+#define EVENTLIRCD_EVMAP_LOCK_MASK   ((0x7     ) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
+#define EVENTLIRCD_EVMAP_LOCK_CAPS   ((0x1 << 2) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
+#define EVENTLIRCD_EVMAP_LOCK_NUM    ((0x1 << 1) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
+#define EVENTLIRCD_EVMAP_LOCK_SCROLL ((0x1 << 0) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
+#define EVENTLIRCD_EVMAP_MOD_OFFSET  (24)
+#define EVENTLIRCD_EVMAP_MOD_MASK    ((0xf     ) << EVENTLIRCD_EVMAP_MOD_OFFSET)
+#define EVENTLIRCD_EVMAP_MOD_CTRL    ((0x1 << 3) << EVENTLIRCD_EVMAP_MOD_OFFSET)
+#define EVENTLIRCD_EVMAP_MOD_SHIFT   ((0x1 << 2) << EVENTLIRCD_EVMAP_MOD_OFFSET)
+#define EVENTLIRCD_EVMAP_MOD_ALT     ((0x1 << 1) << EVENTLIRCD_EVMAP_MOD_OFFSET)
+#define EVENTLIRCD_EVMAP_MOD_META    ((0x1 << 0) << EVENTLIRCD_EVMAP_MOD_OFFSET)
+#define EVENTLIRCD_EVMAP_TYPE_OFFSET (16)
+#define EVENTLIRCD_EVMAP_TYPE_MASK   ((0xff    ) << EVENTLIRCD_EVMAP_TYPE_OFFSET)
+#define EVENTLIRCD_EVMAP_CODE_OFFSET (0)
+#define EVENTLIRCD_EVMAP_CODE_MASK   ((0xffff  ) << EVENTLIRCD_EVMAP_CODE_OFFSET)
 
 #if EV_MAX >= 65534
-# error cannot define LIRCUDEVD_EV_NULL because EV_MAX exceeds 65534
+# error cannot define EVENTLIRCD_EV_NULL because EV_MAX exceeds 65534
 #endif
-#define LIRCUDEVD_EV_NULL 65535
+#define EVENTLIRCD_EV_NULL 65535
 
 #if KEY_MAX >= 65534
-# error cannot define LIRCUDEVD_EVMAP_NULL because KEY_MAX exceeds 65534
+# error cannot define EVENTLIRCD_EVMAP_NULL because KEY_MAX exceeds 65534
 #endif
-#define LIRCUDEVD_EVMAP_NULL 65535
+#define EVENTLIRCD_EVMAP_NULL 65535
 
 /*
  * Macros for reading ioctl bit fields.
@@ -513,133 +513,133 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
         {
             if      (strcmp(name_in_part, "capslock") == 0)
             {
-                if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_CODE_MASK)
+                if (device->evmap[evmap_index].code_in & EVENTLIRCD_EVMAP_CODE_MASK)
                 {
                     syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' lock key token appeared after the base key name\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
-                if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_LOCK_CAPS)
+                if (device->evmap[evmap_index].code_in & EVENTLIRCD_EVMAP_LOCK_CAPS)
                 {
                     syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' lock key token appeared more than once\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
-                device->evmap[evmap_index].code_in |= LIRCUDEVD_EVMAP_LOCK_CAPS;
+                device->evmap[evmap_index].code_in |= EVENTLIRCD_EVMAP_LOCK_CAPS;
             }
             else if (strcmp(name_in_part, "numlock") == 0)
             {
-                if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_CODE_MASK)
+                if (device->evmap[evmap_index].code_in & EVENTLIRCD_EVMAP_CODE_MASK)
                 {
                     syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' lock key token appeared after the base key name\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
-                if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_LOCK_NUM)
+                if (device->evmap[evmap_index].code_in & EVENTLIRCD_EVMAP_LOCK_NUM)
                 {
                     syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' lock key token appeared more than once\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
-                device->evmap[evmap_index].code_in |= LIRCUDEVD_EVMAP_LOCK_NUM;
+                device->evmap[evmap_index].code_in |= EVENTLIRCD_EVMAP_LOCK_NUM;
             }
             else if (strcmp(name_in_part, "scrolllock") == 0)
             {
-                if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_CODE_MASK)
+                if (device->evmap[evmap_index].code_in & EVENTLIRCD_EVMAP_CODE_MASK)
                 {
                     syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' lock key token appeared after the base key name\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
-                if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_LOCK_SCROLL)
+                if (device->evmap[evmap_index].code_in & EVENTLIRCD_EVMAP_LOCK_SCROLL)
                 {
                     syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' lock key token appeared more than once\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
-                device->evmap[evmap_index].code_in |= LIRCUDEVD_EVMAP_LOCK_SCROLL;
+                device->evmap[evmap_index].code_in |= EVENTLIRCD_EVMAP_LOCK_SCROLL;
             }
             else if (strcmp(name_in_part, "ctrl") == 0)
             {
-                if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_CODE_MASK)
+                if (device->evmap[evmap_index].code_in & EVENTLIRCD_EVMAP_CODE_MASK)
                 {
                     syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' modifier key token appeared after the base key name\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
-                if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_MOD_CTRL)
+                if (device->evmap[evmap_index].code_in & EVENTLIRCD_EVMAP_MOD_CTRL)
                 {
                     syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' modifier key token appeared more than once\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
-                device->evmap[evmap_index].code_in |= LIRCUDEVD_EVMAP_MOD_CTRL;
+                device->evmap[evmap_index].code_in |= EVENTLIRCD_EVMAP_MOD_CTRL;
             }
             else if (strcmp(name_in_part, "shift") == 0)
             {
-                if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_CODE_MASK)
+                if (device->evmap[evmap_index].code_in & EVENTLIRCD_EVMAP_CODE_MASK)
                 {
                     syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' modifier key token appeared after the base key name\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
-                if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_MOD_SHIFT)
+                if (device->evmap[evmap_index].code_in & EVENTLIRCD_EVMAP_MOD_SHIFT)
                 {
                     syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' modifier key token appeared more than once\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
-                device->evmap[evmap_index].code_in |= LIRCUDEVD_EVMAP_MOD_SHIFT;
+                device->evmap[evmap_index].code_in |= EVENTLIRCD_EVMAP_MOD_SHIFT;
             }
             else if (strcmp(name_in_part, "alt") == 0)
             {
-                if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_CODE_MASK)
+                if (device->evmap[evmap_index].code_in & EVENTLIRCD_EVMAP_CODE_MASK)
                 {
                     syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' modifier key token appeared after the base key name\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
-                if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_MOD_ALT)
+                if (device->evmap[evmap_index].code_in & EVENTLIRCD_EVMAP_MOD_ALT)
                 {
                     syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' modifier key token appeared more than once\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
-                device->evmap[evmap_index].code_in |= LIRCUDEVD_EVMAP_MOD_ALT;
+                device->evmap[evmap_index].code_in |= EVENTLIRCD_EVMAP_MOD_ALT;
             }
             else if (strcmp(name_in_part, "meta") == 0)
             {
-                if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_CODE_MASK)
+                if (device->evmap[evmap_index].code_in & EVENTLIRCD_EVMAP_CODE_MASK)
                 {
                     syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' modifier key token appeared after the base key name\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
-                if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_MOD_META)
+                if (device->evmap[evmap_index].code_in & EVENTLIRCD_EVMAP_MOD_META)
                 {
                     syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' modifier key token appeared more than once\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
-                device->evmap[evmap_index].code_in |= LIRCUDEVD_EVMAP_MOD_META;
+                device->evmap[evmap_index].code_in |= EVENTLIRCD_EVMAP_MOD_META;
             }
             else
             {
-                if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_CODE_MASK)
+                if (device->evmap[evmap_index].code_in & EVENTLIRCD_EVMAP_CODE_MASK)
                 {
                     evmap_valid = false;
                     break;
@@ -674,13 +674,13 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
                 if ((strncmp(name_in_part, "KEY_", strlen("KEY_")) != 0) &&
                     (strncmp(name_in_part, "BTN_", strlen("BTN_")) != 0))
                 {
-                    if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_LOCK_MASK)
+                    if (device->evmap[evmap_index].code_in & EVENTLIRCD_EVMAP_LOCK_MASK)
                     {
                         syslog(LOG_WARNING, "%s:%u:<name-in>: '%s' lock key applied to non-key event.\n",
                                evmap_path, line_number, name_in_part);
                         evmap_valid = false;
                     }
-                    if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_MOD_MASK)
+                    if (device->evmap[evmap_index].code_in & EVENTLIRCD_EVMAP_MOD_MASK)
                     {
                         syslog(LOG_WARNING, "%s:%u:<name-in>: '%s' modifier key applied to non-key event.\n",
                                evmap_path, line_number, name_in_part);
@@ -693,8 +693,8 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
                         evmap_valid = false;
                     }
                 }
-                device->evmap[evmap_index].code_in |= ((uint32_t)(event_name_to_code[i].type)) << LIRCUDEVD_EVMAP_TYPE_OFFSET;
-                device->evmap[evmap_index].code_in |= ((uint32_t)(event_name_to_code[i].code)) << LIRCUDEVD_EVMAP_CODE_OFFSET;
+                device->evmap[evmap_index].code_in |= ((uint32_t)(event_name_to_code[i].type)) << EVENTLIRCD_EVMAP_TYPE_OFFSET;
+                device->evmap[evmap_index].code_in |= ((uint32_t)(event_name_to_code[i].code)) << EVENTLIRCD_EVMAP_CODE_OFFSET;
             }
             name_in_part = strtok_r(NULL, "+", &name_in_part_state);
         }
@@ -702,7 +702,7 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
         {
             continue;
         }
-        if ((device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_CODE_MASK) == 0)
+        if ((device->evmap[evmap_index].code_in & EVENTLIRCD_EVMAP_CODE_MASK) == 0)
         {
             syslog(LOG_WARNING, "%s:%u:<name-in>: no key in keyboard shortcut.\n",
                    evmap_path, line_number);
@@ -725,7 +725,7 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
         }
         if (strcmp(name_out, "NULL") == 0)
         {
-            device->evmap[evmap_index].code_out = LIRCUDEVD_EVMAP_NULL;
+            device->evmap[evmap_index].code_out = EVENTLIRCD_EVMAP_NULL;
         }
         else
         {
@@ -779,9 +779,9 @@ static int input_device_evmap_run(struct input_device *device)
 
     if (device->evmap == NULL)
     {
-        if (evkey_type[device->current.event_out.code] == LIRCUDEVD_EVKEY_TYPE_NULL)
+        if (evkey_type[device->current.event_out.code] == EVENTLIRCD_EVKEY_TYPE_NULL)
         {
-            device->current.event_out.code = (__u16)(LIRCUDEVD_EVMAP_NULL);
+            device->current.event_out.code = (__u16)(EVENTLIRCD_EVMAP_NULL);
         }
         return 0;
     }
@@ -799,9 +799,9 @@ static int input_device_evmap_run(struct input_device *device)
     result = bsearch(&search, device->evmap, device->evmap_size, sizeof(struct input_device_evmap), input_device_evmap_compare);
     if (result == NULL)
     {
-        if (evkey_type[device->current.event_out.code] == LIRCUDEVD_EVKEY_TYPE_NULL)
+        if (evkey_type[device->current.event_out.code] == EVENTLIRCD_EVKEY_TYPE_NULL)
         {
-            device->current.event_out.type = (__u16)(LIRCUDEVD_EVMAP_NULL);
+            device->current.event_out.type = (__u16)(EVENTLIRCD_EVMAP_NULL);
         }
         return 0;
     }
@@ -839,10 +839,10 @@ static int input_device_event_update(struct input_device *device, const struct i
     {
         return -1;
     }
-    if (device->current.event_out.code == LIRCUDEVD_EVMAP_NULL)
+    if (device->current.event_out.code == EVENTLIRCD_EVMAP_NULL)
     {
         memset(&(device->current.event_out), 0, sizeof(struct input_event));
-        device->current.event_out.type = LIRCUDEVD_EV_NULL;
+        device->current.event_out.type = EVENTLIRCD_EV_NULL;
         device->current.repeat_count = 0;
         return 0;
     }
@@ -857,23 +857,23 @@ static int input_device_event_update(struct input_device *device, const struct i
         switch (device->current.event_in.code)
         {
             case LED_CAPSL:
-                if (device->current.event_in.value == 0) device->lock_state &= ~LIRCUDEVD_EVMAP_LOCK_CAPS;
-                else                                     device->lock_state |=  LIRCUDEVD_EVMAP_LOCK_CAPS;
-                device->current.event_out.type = LIRCUDEVD_EV_NULL;
+                if (device->current.event_in.value == 0) device->lock_state &= ~EVENTLIRCD_EVMAP_LOCK_CAPS;
+                else                                     device->lock_state |=  EVENTLIRCD_EVMAP_LOCK_CAPS;
+                device->current.event_out.type = EVENTLIRCD_EV_NULL;
                 device->current.repeat_count = 0;
                 return 0;
                 break;
             case LED_NUML:
-                if (device->current.event_in.value == 0) device->lock_state &= ~LIRCUDEVD_EVMAP_LOCK_NUM;
-                else                                     device->lock_state |=  LIRCUDEVD_EVMAP_LOCK_NUM;
-                device->current.event_out.type = LIRCUDEVD_EV_NULL;
+                if (device->current.event_in.value == 0) device->lock_state &= ~EVENTLIRCD_EVMAP_LOCK_NUM;
+                else                                     device->lock_state |=  EVENTLIRCD_EVMAP_LOCK_NUM;
+                device->current.event_out.type = EVENTLIRCD_EV_NULL;
                 device->current.repeat_count = 0;
                 return 0;
                 break;
             case LED_SCROLLL:
-                if (device->current.event_in.value == 0) device->lock_state &= ~LIRCUDEVD_EVMAP_LOCK_SCROLL;
-                else                                     device->lock_state |=  LIRCUDEVD_EVMAP_LOCK_SCROLL;
-                device->current.event_out.type = LIRCUDEVD_EV_NULL;
+                if (device->current.event_in.value == 0) device->lock_state &= ~EVENTLIRCD_EVMAP_LOCK_SCROLL;
+                else                                     device->lock_state |=  EVENTLIRCD_EVMAP_LOCK_SCROLL;
+                device->current.event_out.type = EVENTLIRCD_EV_NULL;
                 device->current.repeat_count = 0;
                 return 0;
                 break;
@@ -901,7 +901,7 @@ static int input_device_event_update(struct input_device *device, const struct i
             /*
              * Toggle the capslock status.
              */
-            device->lock_state ^= LIRCUDEVD_EVMAP_LOCK_CAPS;
+            device->lock_state ^= EVENTLIRCD_EVMAP_LOCK_CAPS;
             /*
              * Update the device's capslock status.
              */
@@ -911,7 +911,7 @@ static int input_device_event_update(struct input_device *device, const struct i
                 {
                     .type  = EV_LED,
                     .code  = LED_CAPSL,
-                    .value = ((device->lock_state & LIRCUDEVD_EVMAP_LOCK_CAPS) == 0) ? 0 : 1
+                    .value = ((device->lock_state & EVENTLIRCD_EVMAP_LOCK_CAPS) == 0) ? 0 : 1
                 };
                 if (write(device->fd, &event, sizeof(event)) != sizeof(event))
                 {
@@ -919,7 +919,7 @@ static int input_device_event_update(struct input_device *device, const struct i
                 }
             }
         }
-        device->current.event_out.type = LIRCUDEVD_EV_NULL;
+        device->current.event_out.type = EVENTLIRCD_EV_NULL;
         device->current.repeat_count = 0;
         return 0;
     }
@@ -930,7 +930,7 @@ static int input_device_event_update(struct input_device *device, const struct i
             /*
              * Toggle the numlock status.
              */
-            device->lock_state ^= LIRCUDEVD_EVMAP_LOCK_NUM;
+            device->lock_state ^= EVENTLIRCD_EVMAP_LOCK_NUM;
             /*
              * Update the device's numlock status.
              */
@@ -940,7 +940,7 @@ static int input_device_event_update(struct input_device *device, const struct i
                 {
                     .type  = EV_LED,
                     .code  = LED_NUML,
-                    .value = ((device->lock_state & LIRCUDEVD_EVMAP_LOCK_NUM) == 0) ? 0 : 1
+                    .value = ((device->lock_state & EVENTLIRCD_EVMAP_LOCK_NUM) == 0) ? 0 : 1
                 };
                 if (write(device->fd, &event, sizeof(event)) != sizeof(event))
                 {
@@ -948,7 +948,7 @@ static int input_device_event_update(struct input_device *device, const struct i
                 }
             }
         }
-        device->current.event_out.type = LIRCUDEVD_EV_NULL;
+        device->current.event_out.type = EVENTLIRCD_EV_NULL;
         device->current.repeat_count = 0;
         return 0;
     }
@@ -959,7 +959,7 @@ static int input_device_event_update(struct input_device *device, const struct i
             /*
              * Toggle the scrolllock status.
              */
-            device->lock_state ^= LIRCUDEVD_EVMAP_LOCK_SCROLL;
+            device->lock_state ^= EVENTLIRCD_EVMAP_LOCK_SCROLL;
             /*
              * Update the device's scrolllock status.
              */
@@ -969,7 +969,7 @@ static int input_device_event_update(struct input_device *device, const struct i
                 {
                     .type  = EV_LED,
                     .code  = LED_SCROLLL,
-                    .value = ((device->lock_state & LIRCUDEVD_EVMAP_LOCK_SCROLL) == 0) ? 0 : 1
+                    .value = ((device->lock_state & EVENTLIRCD_EVMAP_LOCK_SCROLL) == 0) ? 0 : 1
                 };
                 if (write(device->fd, &event, sizeof(event)) != sizeof(event))
                 {
@@ -977,7 +977,7 @@ static int input_device_event_update(struct input_device *device, const struct i
                 }
             }
         }
-        device->current.event_out.type = LIRCUDEVD_EV_NULL;
+        device->current.event_out.type = EVENTLIRCD_EV_NULL;
         device->current.repeat_count = 0;
         return 0;
     }
@@ -988,37 +988,37 @@ static int input_device_event_update(struct input_device *device, const struct i
      */
     if ((device->current.event_in.code == KEY_LEFTCTRL ) || (device->current.event_in.code == KEY_RIGHTCTRL ))
     {
-        if (device->current.event_in.value == 0) device->modifier_state &= ~LIRCUDEVD_EVMAP_MOD_CTRL;
-        else                                     device->modifier_state |=  LIRCUDEVD_EVMAP_MOD_CTRL;
+        if (device->current.event_in.value == 0) device->modifier_state &= ~EVENTLIRCD_EVMAP_MOD_CTRL;
+        else                                     device->modifier_state |=  EVENTLIRCD_EVMAP_MOD_CTRL;
         memset(&(device->current.event_out), 0, sizeof(struct input_event));
-        device->current.event_out.type = LIRCUDEVD_EV_NULL;
+        device->current.event_out.type = EVENTLIRCD_EV_NULL;
         device->current.repeat_count = 0;
         return 0;
     }
     if ((device->current.event_in.code == KEY_LEFTSHIFT) || (device->current.event_in.code == KEY_RIGHTSHIFT))
     {
-        if (device->current.event_in.value == 0) device->modifier_state &= ~LIRCUDEVD_EVMAP_MOD_SHIFT;
-        else                                     device->modifier_state |=  LIRCUDEVD_EVMAP_MOD_SHIFT;
+        if (device->current.event_in.value == 0) device->modifier_state &= ~EVENTLIRCD_EVMAP_MOD_SHIFT;
+        else                                     device->modifier_state |=  EVENTLIRCD_EVMAP_MOD_SHIFT;
         memset(&(device->current.event_out), 0, sizeof(struct input_event));
-        device->current.event_out.type = LIRCUDEVD_EV_NULL;
+        device->current.event_out.type = EVENTLIRCD_EV_NULL;
         device->current.repeat_count = 0;
         return 0;
     }
     if ((device->current.event_in.code == KEY_LEFTALT  ) || (device->current.event_in.code == KEY_RIGHTALT  ))
     {
-        if (device->current.event_in.value == 0) device->modifier_state &= ~LIRCUDEVD_EVMAP_MOD_ALT;
-        else                                     device->modifier_state |=  LIRCUDEVD_EVMAP_MOD_ALT;
+        if (device->current.event_in.value == 0) device->modifier_state &= ~EVENTLIRCD_EVMAP_MOD_ALT;
+        else                                     device->modifier_state |=  EVENTLIRCD_EVMAP_MOD_ALT;
         memset(&(device->current.event_out), 0, sizeof(struct input_event));
-        device->current.event_out.type = LIRCUDEVD_EV_NULL;
+        device->current.event_out.type = EVENTLIRCD_EV_NULL;
         device->current.repeat_count = 0;
         return 0;
     }
     if ((device->current.event_in.code == KEY_LEFTMETA ) || (device->current.event_in.code == KEY_RIGHTMETA ))
     {
-        if (device->current.event_in.value == 0) device->modifier_state &= ~LIRCUDEVD_EVMAP_MOD_META;
-        else                                     device->modifier_state |=  LIRCUDEVD_EVMAP_MOD_META;
+        if (device->current.event_in.value == 0) device->modifier_state &= ~EVENTLIRCD_EVMAP_MOD_META;
+        else                                     device->modifier_state |=  EVENTLIRCD_EVMAP_MOD_META;
         memset(&(device->current.event_out), 0, sizeof(struct input_event));
-        device->current.event_out.type = LIRCUDEVD_EV_NULL;
+        device->current.event_out.type = EVENTLIRCD_EV_NULL;
         device->current.repeat_count = 0;
         return 0;
     }
@@ -1030,10 +1030,10 @@ static int input_device_event_update(struct input_device *device, const struct i
     {
         return -1;
     }
-    if (device->current.event_out.code == LIRCUDEVD_EVMAP_NULL)
+    if (device->current.event_out.code == EVENTLIRCD_EVMAP_NULL)
     {
         memset(&(device->current.event_out), 0, sizeof(struct input_event));
-        device->current.event_out.type = LIRCUDEVD_EV_NULL;
+        device->current.event_out.type = EVENTLIRCD_EV_NULL;
         device->current.repeat_count = 0;
         return 0;
     }
@@ -1056,7 +1056,7 @@ static int input_device_event_update(struct input_device *device, const struct i
             if (input_device_previous_push(device) < 0)
             {
                 memset(&(device->current.event_out), 0, sizeof(struct input_event));
-                device->current.event_out.type = LIRCUDEVD_EV_NULL;
+                device->current.event_out.type = EVENTLIRCD_EV_NULL;
                 device->current.repeat_count = 0;
                 return -1;
             }
@@ -1068,7 +1068,7 @@ static int input_device_event_update(struct input_device *device, const struct i
             if ((previous = input_device_previous_get(device)) == NULL)
             {
                 memset(&(device->current.event_out), 0, sizeof(struct input_event));
-                device->current.event_out.type = LIRCUDEVD_EV_NULL;
+                device->current.event_out.type = EVENTLIRCD_EV_NULL;
                 device->current.repeat_count = 0;
                 return 0;
             }
@@ -1079,7 +1079,7 @@ static int input_device_event_update(struct input_device *device, const struct i
              * longer for the first repeat in order to allow the user to release
              * the key before repeating starts.
              */
-            if (evkey_type[device->current.event_out.code] == LIRCUDEVD_EVKEY_TYPE_KEY)
+            if (evkey_type[device->current.event_out.code] == EVENTLIRCD_EVKEY_TYPE_KEY)
             {
                 time_delta = 1000000 * (device->current.event_out.time.tv_sec  - previous->event_out.time.tv_sec ) +
                                        (device->current.event_out.time.tv_usec - previous->event_out.time.tv_usec);
@@ -1091,7 +1091,7 @@ static int input_device_event_update(struct input_device *device, const struct i
                     ((previous->repeat_count >= 5) && (time_delta <  100000)))
                 {
                     memset(&(device->current.event_out), 0, sizeof(struct input_event));
-                    device->current.event_out.type = LIRCUDEVD_EV_NULL;
+                    device->current.event_out.type = EVENTLIRCD_EV_NULL;
                     device->current.repeat_count = 0;
                     return 0;
                 }
@@ -1107,7 +1107,7 @@ static int input_device_event_update(struct input_device *device, const struct i
             if ((previous = input_device_previous_get(device)) == NULL)
             {
                 memset(&(device->current.event_out), 0, sizeof(struct input_event));
-                device->current.event_out.type = LIRCUDEVD_EV_NULL;
+                device->current.event_out.type = EVENTLIRCD_EV_NULL;
                 device->current.repeat_count = 0;
                 return 0;
             }
@@ -1119,7 +1119,7 @@ static int input_device_event_update(struct input_device *device, const struct i
             break;
         default:
             memset(&(device->current.event_out), 0, sizeof(struct input_event));
-            device->current.event_out.type = LIRCUDEVD_EV_NULL;
+            device->current.event_out.type = EVENTLIRCD_EV_NULL;
             device->current.repeat_count = 0;
             break;
     }
@@ -1142,7 +1142,7 @@ static bool input_device_event_is_key(struct input_device *device)
     {
         return false;
     }
-    if (evkey_type[device->current.event_out.code] != LIRCUDEVD_EVKEY_TYPE_KEY)
+    if (evkey_type[device->current.event_out.code] != EVENTLIRCD_EVKEY_TYPE_KEY)
     {
         return false;
     }
@@ -1168,7 +1168,7 @@ static int input_device_handler(void *id)
     }
 
     input_device_event_update(device, &event);
-    if (device->current.event_out.type == LIRCUDEVD_EV_NULL)
+    if (device->current.event_out.type == EVENTLIRCD_EV_NULL)
     {
         return 0;
     }
@@ -1636,9 +1636,9 @@ static int input_device_add(struct udev_device *udev_device)
 
     device->previous_list = NULL;
     memset(&(device->current.event_in), 0, sizeof(struct input_event));
-    device->current.event_in.type = LIRCUDEVD_EV_NULL;
+    device->current.event_in.type = EVENTLIRCD_EV_NULL;
     memset(&(device->current.event_out), 0, sizeof(struct input_event));
-    device->current.event_out.type = LIRCUDEVD_EV_NULL;
+    device->current.event_out.type = EVENTLIRCD_EV_NULL;
     device->current.repeat_count = 0;
 
     /*
@@ -1743,7 +1743,7 @@ static int input_device_add(struct udev_device *udev_device)
                              * key code.
                              */
                             code = device->current.event_out.code;
-                            if (code == LIRCUDEVD_EVMAP_NULL)
+                            if (code == EVENTLIRCD_EVMAP_NULL)
                             {
                                 continue;
                             }
@@ -1751,7 +1751,7 @@ static int input_device_add(struct udev_device *udev_device)
                              * The mapped key code is a button, so mark it as
                              * supported by the mouse/joystick device.
                              */
-                            if (evkey_type[code] == LIRCUDEVD_EVKEY_TYPE_BTN)
+                            if (evkey_type[code] == EVENTLIRCD_EVKEY_TYPE_BTN)
                             {
                                 if (ioctl(device->output.fd, UI_SET_EVBIT, EV_KEY) < 0)
                                 {
@@ -1788,7 +1788,7 @@ static int input_device_add(struct udev_device *udev_device)
                              * key code.
                              */
                             code = device->current.event_out.code;
-                            if (code == LIRCUDEVD_EVMAP_NULL)
+                            if (code == EVENTLIRCD_EVMAP_NULL)
                             {
                                 continue;
                             }
@@ -1826,7 +1826,7 @@ static int input_device_add(struct udev_device *udev_device)
                              * key code.
                              */
                             code = device->current.event_out.code;
-                            if (code == LIRCUDEVD_EVMAP_NULL)
+                            if (code == EVENTLIRCD_EVMAP_NULL)
                             {
                                 continue;
                             }
@@ -1890,7 +1890,7 @@ static int input_device_add(struct udev_device *udev_device)
             /*
              * Skip keyboard shortcuts that map to NULL.
              */
-            if (code_out == LIRCUDEVD_EVMAP_NULL)
+            if (code_out == EVENTLIRCD_EVMAP_NULL)
             {
                 continue;
             }
@@ -1898,53 +1898,53 @@ static int input_device_add(struct udev_device *udev_device)
              * Ignore keyboard shortcuts that require keys the device
              * does not support.
              */
-            if (((code_in & LIRCUDEVD_EVMAP_LOCK_CAPS) != 0) &&
+            if (((code_in & EVENTLIRCD_EVMAP_LOCK_CAPS) != 0) &&
                 (BITFIELD_TEST(KEY_CAPSLOCK, bit_key)   == 0))
             {
                continue;
             }
-            if (((code_in & LIRCUDEVD_EVMAP_LOCK_NUM) != 0) &&
+            if (((code_in & EVENTLIRCD_EVMAP_LOCK_NUM) != 0) &&
                 (BITFIELD_TEST(KEY_NUMLOCK, bit_key)   == 0))
             {
                continue;
             }
-            if (((code_in & LIRCUDEVD_EVMAP_LOCK_SCROLL) != 0) &&
+            if (((code_in & EVENTLIRCD_EVMAP_LOCK_SCROLL) != 0) &&
                 (BITFIELD_TEST(KEY_SCROLLLOCK, bit_key)   == 0))
             {
                continue;
             }
-            if (((code_in & LIRCUDEVD_EVMAP_MOD_CTRL) != 0) &&
+            if (((code_in & EVENTLIRCD_EVMAP_MOD_CTRL) != 0) &&
                 (BITFIELD_TEST(KEY_LEFTCTRL, bit_key)  == 0) &&
                 (BITFIELD_TEST(KEY_RIGHTCTRL, bit_key) == 0))
             {
                continue;
             }
-            if (((code_in & LIRCUDEVD_EVMAP_MOD_SHIFT) != 0) &&
+            if (((code_in & EVENTLIRCD_EVMAP_MOD_SHIFT) != 0) &&
                 (BITFIELD_TEST(KEY_LEFTSHIFT, bit_key)  == 0) &&
                 (BITFIELD_TEST(KEY_RIGHTSHIFT, bit_key) == 0))
             {
                continue;
             }
-            if (((code_in & LIRCUDEVD_EVMAP_MOD_ALT) != 0) &&
+            if (((code_in & EVENTLIRCD_EVMAP_MOD_ALT) != 0) &&
                 (BITFIELD_TEST(KEY_LEFTALT, bit_key)  == 0) &&
                 (BITFIELD_TEST(KEY_RIGHTALT, bit_key) == 0))
             {
                continue;
             }
-            if (((code_in & LIRCUDEVD_EVMAP_MOD_META) != 0) &&
+            if (((code_in & EVENTLIRCD_EVMAP_MOD_META) != 0) &&
                 (BITFIELD_TEST(KEY_LEFTMETA, bit_key)  == 0) &&
                 (BITFIELD_TEST(KEY_RIGHTMETA, bit_key) == 0))
             {
                continue;
             }
-            if (BITFIELD_TEST(code_in & LIRCUDEVD_EVMAP_CODE_MASK, bit_key) == 0)
+            if (BITFIELD_TEST(code_in & EVENTLIRCD_EVMAP_CODE_MASK, bit_key) == 0)
             {
                 continue;
             }
             /*
              * The output is a button so add it to mouse/joystick device.
              */
-            if (evkey_type[code_out] == LIRCUDEVD_EVKEY_TYPE_BTN)
+            if (evkey_type[code_out] == EVENTLIRCD_EVKEY_TYPE_BTN)
             {
                 if (ioctl(device->output.fd, UI_SET_EVBIT, EV_KEY) < 0)
                 {
@@ -2015,18 +2015,18 @@ static int input_device_add(struct udev_device *udev_device)
         ioctl(device->fd, EVIOCGLED(sizeof(bit)), bit);
         if (device->led.capslock == true)
         {
-            if (((bit[LED_CAPSL/8] >> (LED_CAPSL%8)) & 0x1) == 0) device->lock_state &= ~LIRCUDEVD_EVMAP_LOCK_CAPS;
-            else                                                  device->lock_state |=  LIRCUDEVD_EVMAP_LOCK_CAPS;
+            if (((bit[LED_CAPSL/8] >> (LED_CAPSL%8)) & 0x1) == 0) device->lock_state &= ~EVENTLIRCD_EVMAP_LOCK_CAPS;
+            else                                                  device->lock_state |=  EVENTLIRCD_EVMAP_LOCK_CAPS;
         }
         if (device->led.numlock == true)
         {
-            if (((bit[LED_NUML/8] >> (LED_NUML%8)) & 0x1) == 0) device->lock_state &= ~LIRCUDEVD_EVMAP_LOCK_NUM;
-            else                                                device->lock_state |=  LIRCUDEVD_EVMAP_LOCK_NUM;
+            if (((bit[LED_NUML/8] >> (LED_NUML%8)) & 0x1) == 0) device->lock_state &= ~EVENTLIRCD_EVMAP_LOCK_NUM;
+            else                                                device->lock_state |=  EVENTLIRCD_EVMAP_LOCK_NUM;
         }
         if (device->led.scrolllock == true)
         {
-            if (((bit[LED_SCROLLL/8] >> (LED_SCROLLL%8)) & 0x1) == 0) device->lock_state &= ~LIRCUDEVD_EVMAP_LOCK_SCROLL;
-            else                                                      device->lock_state |=  LIRCUDEVD_EVMAP_LOCK_SCROLL;
+            if (((bit[LED_SCROLLL/8] >> (LED_SCROLLL%8)) & 0x1) == 0) device->lock_state &= ~EVENTLIRCD_EVMAP_LOCK_SCROLL;
+            else                                                      device->lock_state |=  EVENTLIRCD_EVMAP_LOCK_SCROLL;
         }
     }
 

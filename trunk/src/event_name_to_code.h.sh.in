@@ -28,8 +28,8 @@ GREP=@GREP@
 
 rm -f event_name_to_code.h
 
-echo "#ifndef _LIRCUDEVD_EVENT_NAME_TO_CODE_H_" >> event_name_to_code.h
-echo "#define _LIRCUDEVD_EVENT_NAME_TO_CODE_H_ 1" >> event_name_to_code.h
+echo "#ifndef _EVENTLIRCD_EVENT_NAME_TO_CODE_H_" >> event_name_to_code.h
+echo "#define _EVENTLIRCD_EVENT_NAME_TO_CODE_H_ 1" >> event_name_to_code.h
 
 echo "#include <${ABSOLUTE_LINUX_INPUT_H}>" >> event_name_to_code.h
 echo "#include <linux/types.h>" >> event_name_to_code.h
