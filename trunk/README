@@ -21,3 +21,12 @@ for events. When input detects an event on one of its input devices, it performs
 the key mapping and sends the resulting mapped event to either the lircd clients
 or the input device's mouse/joystick event device depending on whether the
 mapped event is a keyboard or mouse/joystick event.
+
+The daemon (eventlircd) is a sysvinit daemon. While it should be compatible with
+systemd, it is not a systemd daemon.
+
+The software has no i18n or l10n.
+
+The comments in the source code are not in doxygen format.
+
+The comments in the source code are not complete.
