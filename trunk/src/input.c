@@ -296,7 +296,7 @@ static int input_device_send(struct input_device *device, const struct input_eve
     {
         if (write(device->output.fd, event, sizeof(*event)) != sizeof(*event))
         {
-            syslog(LOG_ERR, "failed to send event (%d %d %d) for %s: %s\n", event->type, event->code, event->value, device->output.dev.name, strerror(errno));
+            syslog(LOG_ERR, "failed to send event (%u %u %s) for %s: %s\n", (unsigned int)event->type, (unsigned int)event->code, (int)event->value, device->output.dev.name, strerror(errno));
             return -1;
         }
         device->output.syn_report = true;
@@ -464,19 +464,19 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
          */
         if (sscanf(line, " %127[a-zA-Z0-9_+] = %127[a-zA-Z0-9_] ", name_in, name_out) != 2)
         {
-            syslog(LOG_WARNING, "%s:%d: format is not <name-in> = <name-out>\n", evmap_path, line_number);
+            syslog(LOG_WARNING, "%s:%u: format is not <name-in> = <name-out>\n", evmap_path, line_number);
             continue;
         }
         name_in[127]  = '\0';
         name_out[127] = '\0';
         if (strlen(name_in) < 1)
         {
-            syslog(LOG_WARNING, "%s:%d:<name-in>: name is empty", evmap_path, line_number);
+            syslog(LOG_WARNING, "%s:%u:<name-in>: name is empty", evmap_path, line_number);
             continue;
         }
         if (strlen(name_out) < 1)
         {
-            syslog(LOG_WARNING, "%s:%d:<name-out>: name is empty", evmap_path, line_number);
+            syslog(LOG_WARNING, "%s:%u:<name-out>: name is empty", evmap_path, line_number);
             continue;
         }
         /*
@@ -489,7 +489,7 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
         name_in_part = strtok_r(name_in, "+", &name_in_part_state);
         if (name_in_part == NULL)
         {
-            syslog(LOG_WARNING, "%s:%d:<name-in>: keyboard shortcut could not be parsed\n", evmap_path, line_number);
+            syslog(LOG_WARNING, "%s:%u:<name-in>: keyboard shortcut could not be parsed\n", evmap_path, line_number);
             continue;
         }
         evmap_valid = true;
@@ -499,14 +499,14 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
             {
                 if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_CODE_MASK)
                 {
-                    syslog(LOG_WARNING, "%s:%d:<name-in>: the '%s' lock key token appeared after the base key name\n",
+                    syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' lock key token appeared after the base key name\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
                 if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_LOCK_CAPS)
                 {
-                    syslog(LOG_WARNING, "%s:%d:<name-in>: the '%s' lock key token appeared more than once\n",
+                    syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' lock key token appeared more than once\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
@@ -517,14 +517,14 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
             {
                 if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_CODE_MASK)
                 {
-                    syslog(LOG_WARNING, "%s:%d:<name-in>: the '%s' lock key token appeared after the base key name\n",
+                    syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' lock key token appeared after the base key name\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
                 if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_LOCK_NUM)
                 {
-                    syslog(LOG_WARNING, "%s:%d:<name-in>: the '%s' lock key token appeared more than once\n",
+                    syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' lock key token appeared more than once\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
@@ -535,14 +535,14 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
             {
                 if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_CODE_MASK)
                 {
-                    syslog(LOG_WARNING, "%s:%d:<name-in>: the '%s' lock key token appeared after the base key name\n",
+                    syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' lock key token appeared after the base key name\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
                 if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_LOCK_SCROLL)
                 {
-                    syslog(LOG_WARNING, "%s:%d:<name-in>: the '%s' lock key token appeared more than once\n",
+                    syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' lock key token appeared more than once\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
@@ -553,14 +553,14 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
             {
                 if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_CODE_MASK)
                 {
-                    syslog(LOG_WARNING, "%s:%d:<name-in>: the '%s' modifier key token appeared after the base key name\n",
+                    syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' modifier key token appeared after the base key name\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
                 if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_MOD_CTRL)
                 {
-                    syslog(LOG_WARNING, "%s:%d:<name-in>: the '%s' modifier key token appeared more than once\n",
+                    syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' modifier key token appeared more than once\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
@@ -571,14 +571,14 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
             {
                 if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_CODE_MASK)
                 {
-                    syslog(LOG_WARNING, "%s:%d:<name-in>: the '%s' modifier key token appeared after the base key name\n",
+                    syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' modifier key token appeared after the base key name\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
                 if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_MOD_SHIFT)
                 {
-                    syslog(LOG_WARNING, "%s:%d:<name-in>: the '%s' modifier key token appeared more than once\n",
+                    syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' modifier key token appeared more than once\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
@@ -589,14 +589,14 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
             {
                 if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_CODE_MASK)
                 {
-                    syslog(LOG_WARNING, "%s:%d:<name-in>: the '%s' modifier key token appeared after the base key name\n",
+                    syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' modifier key token appeared after the base key name\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
                 if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_MOD_ALT)
                 {
-                    syslog(LOG_WARNING, "%s:%d:<name-in>: the '%s' modifier key token appeared more than once\n",
+                    syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' modifier key token appeared more than once\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
@@ -607,14 +607,14 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
             {
                 if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_CODE_MASK)
                 {
-                    syslog(LOG_WARNING, "%s:%d:<name-in>: the '%s' modifier key token appeared after the base key name\n",
+                    syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' modifier key token appeared after the base key name\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
                 }
                 if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_MOD_META)
                 {
-                    syslog(LOG_WARNING, "%s:%d:<name-in>: the '%s' modifier key token appeared more than once\n",
+                    syslog(LOG_WARNING, "%s:%u:<name-in>: the '%s' modifier key token appeared more than once\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
@@ -631,7 +631,7 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
                 for (i = 0 ; (event_name_to_code[i].name != NULL) && (strcmp(name_in_part, event_name_to_code[i].name) != 0) ; i++);
                 if (event_name_to_code[i].name == NULL)
                 {
-                    syslog(LOG_WARNING, "%s:%d:<name-in>: '%s' is not a known key name\n",
+                    syslog(LOG_WARNING, "%s:%u:<name-in>: '%s' is not a known key name\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
@@ -640,7 +640,7 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
                     (strcmp(name_in_part, "KEY_NUMLOCK"   ) == 0) ||
                     (strcmp(name_in_part, "KEY_SCROLLLOCK") == 0))
                 {
-                    syslog(LOG_WARNING, "%s:%d:<name-in>: '%s' is a key name that is part of the lock key token.\n",
+                    syslog(LOG_WARNING, "%s:%u:<name-in>: '%s' is a key name that is part of the lock key token.\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
@@ -650,7 +650,7 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
                     (strcmp(name_in_part, "KEY_LEFTALT"   ) == 0) || (strcmp(name_in_part, "KEY_RIGHTALT"   ) == 0) ||
                     (strcmp(name_in_part, "KEY_LEFTMETA"  ) == 0) || (strcmp(name_in_part, "KEY_RIGHTMETA"  ) == 0))
                 {
-                    syslog(LOG_WARNING, "%s:%d:<name-in>: '%s' is a key name that is part of the modifier key token.\n",
+                    syslog(LOG_WARNING, "%s:%u:<name-in>: '%s' is a key name that is part of the modifier key token.\n",
                            evmap_path, line_number, name_in_part);
                     evmap_valid = false;
                     break;
@@ -660,19 +660,19 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
                 {
                     if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_LOCK_MASK)
                     {
-                        syslog(LOG_WARNING, "%s:%d:<name-in>: '%s' lock key applied to non-key event.\n",
+                        syslog(LOG_WARNING, "%s:%u:<name-in>: '%s' lock key applied to non-key event.\n",
                                evmap_path, line_number, name_in_part);
                         evmap_valid = false;
                     }
                     if (device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_MOD_MASK)
                     {
-                        syslog(LOG_WARNING, "%s:%d:<name-in>: '%s' modifier key applied to non-key event.\n",
+                        syslog(LOG_WARNING, "%s:%u:<name-in>: '%s' modifier key applied to non-key event.\n",
                                evmap_path, line_number, name_in_part);
                         evmap_valid = false;
                     }
                     if (strcmp(name_out, "NULL") != 0)
                     {
-                        syslog(LOG_WARNING, "%s:%d:<name-in>: '%s' non-key event mapped to non-null value.\n",
+                        syslog(LOG_WARNING, "%s:%u:<name-in>: '%s' non-key event mapped to non-null value.\n",
                                evmap_path, line_number, name_in_part);
                         evmap_valid = false;
                     }
@@ -688,7 +688,7 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
         }
         if ((device->evmap[evmap_index].code_in & LIRCUDEVD_EVMAP_CODE_MASK) == 0)
         {
-            syslog(LOG_WARNING, "%s:%d:<name-in>: no key in keyboard shortcut.\n",
+            syslog(LOG_WARNING, "%s:%u:<name-in>: no key in keyboard shortcut.\n",
                    evmap_path, line_number);
             evmap_valid = false;
             continue;
@@ -697,7 +697,7 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
         {
             if (device->evmap[evmap_index].code_in == device->evmap[i].code_in)
             {
-                syslog(LOG_WARNING, "%s:%d:<name-in>: duplicate keyboard shortcut.\n",
+                syslog(LOG_WARNING, "%s:%u:<name-in>: duplicate keyboard shortcut.\n",
                        evmap_path, line_number);
                 evmap_valid = false;
                 break;
@@ -716,7 +716,7 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
             if ((strncmp(name_out, "KEY_", strlen("KEY_")) != 0) &&
                 (strncmp(name_out, "BTN_", strlen("BTN_")) != 0))
             {
-                syslog(LOG_WARNING, "%s:%d:<name-out>: '%s' is not a valid key name\n",
+                syslog(LOG_WARNING, "%s:%u:<name-out>: '%s' is not a valid key name\n",
                        evmap_path, line_number, name_out);
                 evmap_valid = false;
                 continue;
@@ -724,7 +724,7 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
             for (i = 0 ; (event_name_to_code[i].name != NULL) && (strcmp(name_out, event_name_to_code[i].name) != 0) ; i++);
             if (event_name_to_code[i].name == NULL)
             {
-                syslog(LOG_WARNING, "%s:%d:<name-out>: '%s' is not a valid key name\n",
+                syslog(LOG_WARNING, "%s:%u:<name-out>: '%s' is not a valid key name\n",
                        evmap_path, line_number, name_out);
                 evmap_valid = false;
                 continue;
@@ -735,7 +735,7 @@ static int input_device_evmap_init(struct input_device *device, const char *evma
     }
     device->evmap_size = evmap_index;
 
-    syslog(LOG_DEBUG, "%s: using %d valid keyboard shortcut mappings\n", evmap_path, device->evmap_size);
+    syslog(LOG_DEBUG, "%s: using %u valid keyboard shortcut mappings\n", evmap_path, (unsigned int)device->evmap_size);
 
     /*
      * Sort the event map so that later look-ups can be done with a binary search.
@@ -1500,7 +1500,7 @@ static int input_device_add(struct udev_device *udev_device)
                         {
                             syslog(LOG_DEBUG,
                                    "input device %s: event code 0x%02x of unsupported event type EV_MSC will be discarded\n",
-                                   device->path, j);
+                                   device->path, (unsigned int)j);
                         }
                     }
                     break;
@@ -1514,7 +1514,7 @@ static int input_device_add(struct udev_device *udev_device)
                         {
                             syslog(LOG_DEBUG,
                                    "input device %s: event code 0x%02x of unsupported event type EV_SW will be discarded\n",
-                                   device->path, j);
+                                   device->path, (unsigned int)j);
                         }
                     }
                     break;
@@ -1531,7 +1531,7 @@ static int input_device_add(struct udev_device *udev_device)
                         {
                             syslog(LOG_DEBUG,
                                    "input device %s: unsupported event code 0x%02x of event type EV_LED will be discarded\n",
-                                   device->path, j);
+                                   device->path, (unsigned int)j);
                         }
                     }
                     break;
@@ -1545,7 +1545,7 @@ static int input_device_add(struct udev_device *udev_device)
                         {
                             syslog(LOG_DEBUG,
                                    "input device %s: event code 0x%02x of unsupported event type EV_SND will be discarded\n",
-                                   device->path, j);
+                                   device->path, (unsigned int)j);
                         }
                     }
                     break;
@@ -1564,7 +1564,7 @@ static int input_device_add(struct udev_device *udev_device)
                         {
                             syslog(LOG_DEBUG,
                                    "input device %s: event code 0x%02x of unsupported event type EV_FF will be discarded\n",
-                                   device->path, j);
+                                   device->path, (unsigned int)j);
                         }
                     }
                     break;
@@ -1583,14 +1583,14 @@ static int input_device_add(struct udev_device *udev_device)
                         {
                             syslog(LOG_DEBUG,
                                    "input device %s: event code 0x%02x of unsupported event type EV_FF_STATUS will be discarded\n",
-                                   device->path, j);
+                                   device->path, (unsigned int)j);
                         }
                     }
                     break;
                 default:
                     syslog(LOG_DEBUG,
                            "input device %s: events of unsupported event type 0x%02x will be discarded\n",
-                           device->path, i);
+                           device->path, (unsigned int)i);
                     break;
             }
         }
@@ -1747,7 +1747,7 @@ static int input_device_add(struct udev_device *udev_device)
                                 {
                                     syslog(LOG_ERR,
                                            "input device %s: failed to set UI_SET_KEYBIT 0x%02x for output event device: %s\n",
-                                           device->path, code, strerror(errno));
+                                           device->path, (unsigned int)code, strerror(errno));
                                 }
                                 output_active = true;
                             }
@@ -1786,7 +1786,7 @@ static int input_device_add(struct udev_device *udev_device)
                             {
                                 syslog(LOG_ERR,
                                        "input device %s: failed to set UI_SET_RELBIT 0x%02x for output event device: %s\n",
-                                       device->path, code, strerror(errno));
+                                       device->path, (unsigned int)code, strerror(errno));
                             }
                             output_active = true;
                         }
@@ -1825,13 +1825,13 @@ static int input_device_add(struct udev_device *udev_device)
                             {
                                 syslog(LOG_ERR,
                                        "input device %s: failed to set UI_SET_ABSBIT 0x%02x for output event device: %s\n",
-                                       device->path, code, strerror(errno));
+                                       device->path, (unsigned int)code, strerror(errno));
                             }
                             if (ioctl(device->fd, EVIOCGABS(code), &absinfo) < 0)
                             {
                                 syslog(LOG_ERR,
                                        "input device %s: failed to get ABS information for 0x%02x of output event device: %s\n",
-                                       device->path, code, strerror(errno));
+                                       device->path, (unsigned int)code, strerror(errno));
                             }
                             else
                             {
@@ -1940,7 +1940,7 @@ static int input_device_add(struct udev_device *udev_device)
                 {
                     syslog(LOG_ERR,
                            "input device %s: failed to set UI_SET_KEYBIT 0x%02x for output event device: %s\n",
-                           device->path, code_out, strerror(errno));
+                           device->path, (unsigned int)code_out, strerror(errno));
                 }
                 output_active = true;
             }

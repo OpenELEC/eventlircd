@@ -319,7 +319,7 @@ int lircd_send(const struct input_event *event, const char *name, unsigned int r
     if (event->value == 0)
     {
         message_len = snprintf(message, sizeof message, "%x %x %s%s %s\n",
-                       event->code,
+                       (unsigned int)event->code,
                        repeat_count,
                        name,
                        eventlircd_lircd.release_suffix,
@@ -328,7 +328,7 @@ int lircd_send(const struct input_event *event, const char *name, unsigned int r
     else
     {
         message_len = snprintf(message, sizeof message, "%x %x %s %s\n",
-                       event->code,
+                       (unsigned int)event->code,
                        repeat_count,
                        name,
                        remote);
