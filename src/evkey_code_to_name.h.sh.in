@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright (C) 2009 Paul Bender.
+# Copyright (C) 2009-2010 Paul Bender.
 #
 # This file is part of eventlircd.
 #
@@ -20,6 +20,13 @@
 #
 # This script generates the evkey_code_to_name.h header file using the installed 
 # linux/input.h header file.
+#
+
+#
+# This script makes two assumptions about linux/input.h. First, it assumes that
+# any evkey defines that are not monotonically increasing can be ignored.
+# Second, it assumes that any evkey defines that are not numeric (e.g. defined
+# as a function of other evkey defines) can be ignored.
 #
 
 ABSOLUTE_LINUX_INPUT_H=@ABSOLUTE_LINUX_INPUT_H@

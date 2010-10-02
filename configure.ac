@@ -31,17 +31,20 @@ AM_SILENT_RULES
 
 AC_PROG_CC
 AC_PROG_CC_C99
-
-if test "x$ac_cv_prog_cc_c99" = "xno" ; then
-    AC_MSG_ERROR([the compiler is not C99 compliant])
-fi
-
 AM_PROG_CC_C_O
 AC_PROG_AWK
 AC_PROG_GREP
 AC_PROG_SED
 AC_PROG_INSTALL
 
+dnl The program makes use of some C99 features such as stdbool.h
+if test "x$ac_cv_prog_cc_c99" = "xno" ; then
+    AC_MSG_ERROR([the compiler is not C99 compliant])
+fi
+
+dnl ${AWK} must support the '--non-decimal-data' option because
+dnl evkey_code_to_name.h.sh and evkey_type.h use ${AWK} to process the evkey
+dnl defines in linux/input.h some of which are hexidecimal rather than decimal.
 if ! ${AWK} --non-decimal-data "" > /dev/null 2>&1 ; then
     AC_MSG_ERROR([${AWK} does not support the command line argument '--non-decimal-data'])
 fi
@@ -49,8 +52,7 @@ fi
 PKG_PROG_PKG_CONFIG
 
 AC_HEADER_STDC
-dnl Commented out AC_HEADER_STDBOOL because it fails with -Wall -Werror.
-dnl AC_HEADER_STDBOOL
+AC_HEADER_STDBOOL
 AC_HEADER_TIME
 
 dnl
@@ -85,7 +87,10 @@ AC_CHECK_HEADER([linux/uinput.h],[],[AC_MSG_ERROR([failed to find the required h
 dnl libudev headers.
 AC_CHECK_HEADER([libudev.h],[],[AC_MSG_ERROR([failed to find the required header file libudev.h])])
 
-dnl Determine the absolute path to the header file linux/input.h.
+dnl The absolute path to the header file linux/input.h is needed by 
+dnl event_name_to_code.h.sh, evkey_code_to_name.h.sh and evkey_type.h.sh
+dnl in order for them to generate the header files event_name_to_code.h,
+dnl evkey_code_to_name.h and evkey_type.h respectively
 AX_ABSOLUTE_HEADER(linux/input.h)
 if test "x$gl_cv_absolute_linux_input_h" = "x" ; then
     AC_MSG_ERROR([failed to find the absolute path to header file linux/input.h])
@@ -109,6 +114,7 @@ AC_ARG_WITH(udev-dir, AS_HELP_STRING([--with-udev-dir=DIR], [udev directory @<:@
     [UDEV_DIR="/lib/udev"])
 AC_SUBST(UDEV_DIR)
 
+dnl Only add an optimization flag when one is not already present.
 if ! echo " ${CC} ${CFLAGS} " | ${GREP} ' -O@<:@^ @:>@* ' > /dev/null ; then
     AX_C_CHECK_FLAG([-O2],[],[],[CFLAGS="$CFLAGS -O2"],[])
 fi
