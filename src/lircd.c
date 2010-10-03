@@ -46,10 +46,10 @@
  * -Wused know that it is ok.
  */
 #ifdef UNUSED
-#elif defined(__GNUC__)
-# define UNUSED(x) UNUSED_ ## x __attribute__((unused))
-#elif defined(__LCLINT__)
-# define UNUSED(x) /*@unused@*/ x
+# error cannot define UNUSED because it is already defined
+#endif
+#if defined(__GNUC__)
+# define UNUSED(x) x __attribute__((unused))
 #else
 # define UNUSED(x) x
 #endif
@@ -351,7 +351,7 @@ int lircd_send(const struct input_event *event, const char *name, unsigned int r
     {
         for(client = eventlircd_lircd.client_list ; client != NULL ; client = client->next)
         {
-            if (write(client->fd, message, message_len) != message_len)
+            if (write(client->fd, message, (size_t)message_len) != (ssize_t)message_len)
             {
                 if (lircd_client_close(client) != 0)
                 {
