@@ -51,6 +51,13 @@ ATTRS{name}=="bdremoteng", \
   ENV{eventlircd_enable}="true"
 
 #-------------------------------------------------------------------------------
+# Ask eventlircd to handle input event devices created by ir-core (kernel).
+#-------------------------------------------------------------------------------
+SUBSYSTEMS=="rc", \
+  ENV{eventlircd_enable}="true"
+  ENV{eventlircd_evmap}="ircore.evmap"
+
+#-------------------------------------------------------------------------------
 # Ask eventlircd to handle USB HID devices that show up as event devices and are
 # known to be remote controls. For simplicity, the event map file names have the
 # format <BUSTYPE>_<VENDOR>_<PRODUCT>.evmap.
