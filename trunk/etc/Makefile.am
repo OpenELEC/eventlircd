@@ -7,4 +7,5 @@ dist_evmap_DATA = \
 	03_147a_e02d.evmap \
 	bdremoteng.evmap \
 	default.evmap \
+	ircore.evmap \
 	mcekbd.evmap
