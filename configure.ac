@@ -125,7 +125,9 @@ AX_C_CHECK_FLAG([-Werror],[],[],[CFLAGS="$CFLAGS -Werror"],[])
 AX_C_CHECK_FLAG([-Wall],[],[],[CFLAGS="$CFLAGS -Wall"],[])
 AX_C_CHECK_FLAG([-Wextra],[],[],[CFLAGS="$CFLAGS -Wextra"],[])
 AX_C_CHECK_FLAG([-Wcast-qual],[],[],[CFLAGS="$CFLAGS -Wcast-qual"],[])
-AX_C_CHECK_FLAG([-Wconversion],[],[],[CFLAGS="$CFLAGS -Wconversion"],[])
+dnl This flag is commented out because is causes compilation to fail due to
+dnl questionable implicit conversions in some Linux and glibc header files.
+dnl AX_C_CHECK_FLAG([-Wconversion],[],[],[CFLAGS="$CFLAGS -Wconversion"],[])
 AX_C_CHECK_FLAG([-Wfloat-equal],[],[],[CFLAGS="$CFLAGS -Wfloat-equal"],[])
 AX_C_CHECK_FLAG([-Wformat=2],[],[],[CFLAGS="$CFLAGS -Wformat=2"],[])
 AX_C_CHECK_FLAG([-Winit-self],[],[],[CFLAGS="$CFLAGS -Winit-self"],[])
