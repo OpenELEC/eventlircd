@@ -53,7 +53,7 @@ case "${ACTION}" in
     remove)
         instance=`echo $DEVNAME | sed -e 's/\/\+/~/g' -e 's/^~dev~//'`
         if test -e "@localstatedir@/run/lirc/lircd-${instance}.pid" ; then
-            pid=`cat @localstate@/run/lirc/lircd-${instance}.pid`
+            pid=`cat @localstatedir@/run/lirc/lircd-${instance}.pid`
             if test ! "x${pid}" = "x" ; then
                 kill ${pid}
             fi
