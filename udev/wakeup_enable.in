@@ -5,13 +5,13 @@
 
 devpath=`readlink -f "/sys/${DEVPATH}"`
 while echo "${devpath}" | /bin/grep -q '^/sys/devices/' > /dev/null 2>&1 ; do
-    if test -e "${devpath}/power/wakeup" ; then                                 
-        state=`cat "${devpath}/power/wakeup"`                                       
+    if test -e "${devpath}/power/wakeup" ; then
+        state=`cat "${devpath}/power/wakeup"`
         if test "x${state}" = "xdisabled" ; then
             echo "enabled" > "${devpath}/power/wakeup"
-        fi                                                 
-    fi                                                     
+        fi
+    fi
     devpath=`dirname "${devpath}"`
-done                                       
-                                           
+done
+
 exit 0
