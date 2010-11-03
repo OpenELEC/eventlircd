@@ -75,30 +75,30 @@
 #define DEVICE_VERSION 0
 
 #define EVENTLIRCD_EVMAP_LOCK_OFFSET (28)
-#define EVENTLIRCD_EVMAP_LOCK_MASK   ((0x7     ) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
-#define EVENTLIRCD_EVMAP_LOCK_CAPS   ((0x1 << 2) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
-#define EVENTLIRCD_EVMAP_LOCK_NUM    ((0x1 << 1) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
-#define EVENTLIRCD_EVMAP_LOCK_SCROLL ((0x1 << 0) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
+#define EVENTLIRCD_EVMAP_LOCK_MASK   ((0x7U     ) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
+#define EVENTLIRCD_EVMAP_LOCK_CAPS   ((0x1U << 2) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
+#define EVENTLIRCD_EVMAP_LOCK_NUM    ((0x1U << 1) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
+#define EVENTLIRCD_EVMAP_LOCK_SCROLL ((0x1U << 0) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
 #define EVENTLIRCD_EVMAP_MOD_OFFSET  (24)
-#define EVENTLIRCD_EVMAP_MOD_MASK    ((0xf     ) << EVENTLIRCD_EVMAP_MOD_OFFSET)
-#define EVENTLIRCD_EVMAP_MOD_CTRL    ((0x1 << 3) << EVENTLIRCD_EVMAP_MOD_OFFSET)
-#define EVENTLIRCD_EVMAP_MOD_SHIFT   ((0x1 << 2) << EVENTLIRCD_EVMAP_MOD_OFFSET)
-#define EVENTLIRCD_EVMAP_MOD_ALT     ((0x1 << 1) << EVENTLIRCD_EVMAP_MOD_OFFSET)
-#define EVENTLIRCD_EVMAP_MOD_META    ((0x1 << 0) << EVENTLIRCD_EVMAP_MOD_OFFSET)
+#define EVENTLIRCD_EVMAP_MOD_MASK    ((0xfU     ) << EVENTLIRCD_EVMAP_MOD_OFFSET)
+#define EVENTLIRCD_EVMAP_MOD_CTRL    ((0x1U << 3) << EVENTLIRCD_EVMAP_MOD_OFFSET)
+#define EVENTLIRCD_EVMAP_MOD_SHIFT   ((0x1U << 2) << EVENTLIRCD_EVMAP_MOD_OFFSET)
+#define EVENTLIRCD_EVMAP_MOD_ALT     ((0x1U << 1) << EVENTLIRCD_EVMAP_MOD_OFFSET)
+#define EVENTLIRCD_EVMAP_MOD_META    ((0x1U << 0) << EVENTLIRCD_EVMAP_MOD_OFFSET)
 #define EVENTLIRCD_EVMAP_TYPE_OFFSET (16)
-#define EVENTLIRCD_EVMAP_TYPE_MASK   ((0xff    ) << EVENTLIRCD_EVMAP_TYPE_OFFSET)
+#define EVENTLIRCD_EVMAP_TYPE_MASK   ((0xffU    ) << EVENTLIRCD_EVMAP_TYPE_OFFSET)
 #define EVENTLIRCD_EVMAP_CODE_OFFSET (0)
-#define EVENTLIRCD_EVMAP_CODE_MASK   ((0xffff  ) << EVENTLIRCD_EVMAP_CODE_OFFSET)
+#define EVENTLIRCD_EVMAP_CODE_MASK   ((0xffffU  ) << EVENTLIRCD_EVMAP_CODE_OFFSET)
 
 #if EV_MAX >= 65534
 # error cannot define EVENTLIRCD_EV_NULL because EV_MAX exceeds 65534
 #endif
 #define EVENTLIRCD_EV_NULL 65535
 
-#if KEY_MAX >= 65534
+#if KEY_MAX >= 65534U
 # error cannot define EVENTLIRCD_EVMAP_NULL because KEY_MAX exceeds 65534
 #endif
-#define EVENTLIRCD_EVMAP_NULL 65535
+#define EVENTLIRCD_EVMAP_NULL 65535U
 
 /*
  * Macros for reading ioctl bit fields.
@@ -323,8 +323,8 @@ static int input_device_send(struct input_device *device, const struct input_eve
 
 static int input_device_evmap_compare(const void *evmap_a, const void *evmap_b)
 {
-    __s32 code_a = (__s32)(((struct input_device_evmap *)evmap_a)->code_in);
-    __s32 code_b = (__s32)(((struct input_device_evmap *)evmap_b)->code_in);
+    __s32 code_a = (__s32)(((const struct input_device_evmap *)evmap_a)->code_in);
+    __s32 code_b = (__s32)(((const struct input_device_evmap *)evmap_b)->code_in);
 
     return (code_a - code_b);
 }
@@ -1336,12 +1336,13 @@ static int input_device_add(struct udev_device *udev_device)
     unsigned long bit_snd[BITFIELD_LONGS_PER_ARRAY(SND_MAX)];
     unsigned long bit_ff[BITFIELD_LONGS_PER_ARRAY(FF_MAX)];
     unsigned long bit_ff_status[BITFIELD_LONGS_PER_ARRAY(FF_STATUS_MAX)];
-    size_t i;
-    size_t j;
+    __u16 i;
+    __u16 j;
+    size_t z;
     bool output_active;
     __u16 type;
     __u16 code;
-    __u16 code_in;
+    uint32_t code_in;
     __u16 code_out;
 
     if (udev_device == NULL)
@@ -1645,9 +1646,9 @@ static int input_device_add(struct udev_device *udev_device)
      * Create output event device for events that are not sent to the lircd socket.
      */
     device->output.fd = -1;
-    for (i = 0 ; (device->output.fd == -1) && (uinput_devname[i] != NULL) ; i++)
+    for (z = 0 ; (device->output.fd == -1) && (uinput_devname[z] != NULL) ; z++)
     {
-        device->output.fd = open(uinput_devname[i], O_WRONLY | O_NDELAY);
+        device->output.fd = open(uinput_devname[z], O_WRONLY | O_NDELAY);
     }
     if (device->output.fd == -1)
     {
@@ -1883,10 +1884,10 @@ static int input_device_add(struct udev_device *udev_device)
      */
     if (BITFIELD_TEST(EV_KEY, bit) != 0)
     {
-        for (i = 0 ; i < device->evmap_size ; i++)
+        for (z = 0 ; z < device->evmap_size ; z++)
         {
-            code_in  = device->evmap[i].code_in;
-            code_out = device->evmap[i].code_out;
+            code_in  = device->evmap[z].code_in;
+            code_out = device->evmap[z].code_out;
             /*
              * Skip keyboard shortcuts that map to NULL.
              */
