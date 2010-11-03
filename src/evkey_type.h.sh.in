@@ -41,8 +41,7 @@ ${AWK} --non-decimal-data "
       printf(\"#define EVENTLIRCD_EVKEY_TYPE_NULL 0\n\");
       printf(\"#define EVENTLIRCD_EVKEY_TYPE_KEY  1\n\");
       printf(\"#define EVENTLIRCD_EVKEY_TYPE_BTN  2\n\");
-      printf(\"static const int evkey_type[KEY_MAX] =\n\");
-      printf(\"{\");
+      printf(\"static const int evkey_type[KEY_MAX] = {\n\");
       code_cur = -1;
     };
     /#define KEY_CNT/             { next; };

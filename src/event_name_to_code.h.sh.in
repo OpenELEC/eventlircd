@@ -33,18 +33,16 @@ ${AWK} "
       printf(\"#define _EVENTLIRCD_EVENT_NAME_TO_CODE_H_ 1\n\");
       printf(\"#include <${ABSOLUTE_LINUX_INPUT_H}>\n\");
       printf(\"#include <linux/types.h>\n\");
-      printf(\"static const struct\n\");
-      printf(\"{\n\");
-      printf(\"    const char *name;\n\");
-      printf(\"    __u16 type;\n\");
-      printf(\"    __u16 code;\n\");
-      printf(\"} event_name_to_code[] =\n\");
-      printf(\"{\n\");
+      printf(\"static const struct {\n\");
+      printf(\"\tconst char *name;\n\");
+      printf(\"\t__u16 type;\n\");
+      printf(\"\t__u16 code;\n\");
+      printf(\"} event_name_to_code[] = {\n\");
     };
     /#define SYN_/                {
                                     code_str = \"\\\"\" \$2 \"\\\"\";
                                     code_num = \$2;
-                                    printf(\"    { %-25s , EV_SYN , %-23s },\n\", code_str, code_num);
+                                    printf(\"\t{ %-25s , EV_SYN , %-23s },\n\", code_str, code_num);
                                   };
     /#define KEY_CNT/             { next; };
     /#define KEY_MAX/             { next; };
@@ -53,57 +51,57 @@ ${AWK} "
     /#define KEY_/                {
                                     code_str = \"\\\"\" \$2 \"\\\"\";
                                     code_num = \$2;
-                                    printf(\"    { %-25s , EV_KEY , %-23s },\n\", code_str, code_num);
+                                    printf(\"\t{ %-25s , EV_KEY , %-23s },\n\", code_str, code_num);
                                   };
     /#define BTN_/                {
                                     code_str = \"\\\"\" \$2 \"\\\"\";
                                     code_num = \$2;
-                                    printf(\"    { %-25s , EV_KEY , %-23s },\n\", code_str, code_num);
+                                    printf(\"\t{ %-25s , EV_KEY , %-23s },\n\", code_str, code_num);
                                   };
     /#define REL_CNT/             { next; };
     /#define REL_MAX/             { next; };
     /#define REL_/                {
                                     code_str = \"\\\"\" \$2 \"\\\"\";
                                     code_num = \$2;
-                                    printf(\"    { %-25s , EV_REL , %-23s },\n\", code_str, code_num);
+                                    printf(\"\t{ %-25s , EV_REL , %-23s },\n\", code_str, code_num);
                                   };
     /#define ABS_CNT/             { next; };
     /#define ABS_MAX/             { next; };
     /#define ABS_/                {
                                     code_str = \"\\\"\" \$2 \"\\\"\";
                                     code_num = \$2;
-                                    printf(\"    { %-25s , EV_ABS , %-23s },\n\", code_str, code_num);
+                                    printf(\"\t{ %-25s , EV_ABS , %-23s },\n\", code_str, code_num);
                                   };
     /#define MSC_CNT/             { next; };
     /#define MSC_MAX/             { next; };
     /#define MSC_/                {
                                     code_str = \"\\\"\" \$2 \"\\\"\";
                                     code_num = \$2;
-                                    printf(\"    { %-25s , EV_MSC , %-23s },\n\", code_str, code_num);
+                                    printf(\"\t{ %-25s , EV_MSC , %-23s },\n\", code_str, code_num);
                                   };
     /#define SW_CNT/              { next; };
     /#define SW_MAX/              { next; };
     /#define SW_/                 {
                                     code_str = \"\\\"\" \$2 \"\\\"\";
                                     code_num = \$2;
-                                    printf(\"    { %-25s , EV_SW  , %-23s },\n\", code_str, code_num);
+                                    printf(\"\t{ %-25s , EV_SW  , %-23s },\n\", code_str, code_num);
                                   };
     /#define LED_CNT/             { next; };
     /#define LED_MAX/             { next; };
     /#define LED_/                {
                                     code_str = \"\\\"\" \$2 \"\\\"\";
                                     code_num = \$2;
-                                    printf(\"    { %-25s , EV_LED , %-23s },\n\", code_str, code_num);
+                                    printf(\"\t{ %-25s , EV_LED , %-23s },\n\", code_str, code_num);
                                   };
     /#define SND_CNT/             { next; };
     /#define SND_MAX/             { next; };
     /#define SND_/                {
                                     code_str = \"\\\"\" \$2 \"\\\"\";
                                     code_num = \$2;
-                                    printf(\"    { %-25s , EV_SND , %-23s },\n\", code_str, code_num);
+                                    printf(\"\t{ %-25s , EV_SND , %-23s },\n\", code_str, code_num);
                                   };
     END {
-      printf(\"    { NULL                      , 0      , 0                       },\n\");
+      printf(\"\t{ NULL                      , 0      , 0                       },\n\");
       printf(\"};\n\");
       printf(\"#endif\n\");
     };
