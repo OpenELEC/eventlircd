@@ -60,10 +60,10 @@
  * -Wused know that it is ok.
  */
 #ifdef UNUSED
-#elif defined(__GNUC__)
-# define UNUSED(x) UNUSED_ ## x __attribute__((unused))
-#elif defined(__LCLINT__)
-# define UNUSED(x) /*@unused@*/ x
+# error cannot define UNUSED because it is already defined
+#endif
+#if defined(__GNUC__)
+# define UNUSED(x) x __attribute__((unused))
 #else
 # define UNUSED(x) x
 #endif
