@@ -60,10 +60,10 @@
  * -Wused know that it is ok.
  */
 #ifdef UNUSED
-# error cannot define UNUSED because it is already defined
-#endif
-#if defined(__GNUC__)
-# define UNUSED(x) x __attribute__((unused))
+#elif defined(__GNUC__)
+# define UNUSED(x) UNUSED_ ## x __attribute__((unused))
+#elif defined(__LCLINT__)
+# define UNUSED(x) /*@unused@*/ x
 #else
 # define UNUSED(x) x
 #endif
@@ -74,21 +74,21 @@
 #define DEVICE_PRODUCT 0
 #define DEVICE_VERSION 0
 
-#define EVENTLIRCD_EVMAP_LOCK_OFFSET (8)
-#define EVENTLIRCD_EVMAP_LOCK_MASK   ((0x7U     ) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
-#define EVENTLIRCD_EVMAP_LOCK_CAPS   ((0x1U << 2) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
-#define EVENTLIRCD_EVMAP_LOCK_NUM    ((0x1U << 1) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
-#define EVENTLIRCD_EVMAP_LOCK_SCROLL ((0x1U << 0) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
-#define EVENTLIRCD_EVMAP_MOD_OFFSET  (4)
-#define EVENTLIRCD_EVMAP_MOD_MASK    ((0xfU     ) << EVENTLIRCD_EVMAP_MOD_OFFSET)
-#define EVENTLIRCD_EVMAP_MOD_CTRL    ((0x1U << 3) << EVENTLIRCD_EVMAP_MOD_OFFSET)
-#define EVENTLIRCD_EVMAP_MOD_SHIFT   ((0x1U << 2) << EVENTLIRCD_EVMAP_MOD_OFFSET)
-#define EVENTLIRCD_EVMAP_MOD_ALT     ((0x1U << 1) << EVENTLIRCD_EVMAP_MOD_OFFSET)
-#define EVENTLIRCD_EVMAP_MOD_META    ((0x1U << 0) << EVENTLIRCD_EVMAP_MOD_OFFSET)
-#define EVENTLIRCD_EVMAP_TYPE_OFFSET (6)
-#define EVENTLIRCD_EVMAP_TYPE_MASK   ((0xffU    ) << EVENTLIRCD_EVMAP_TYPE_OFFSET)
+#define EVENTLIRCD_EVMAP_LOCK_OFFSET (28)
+#define EVENTLIRCD_EVMAP_LOCK_MASK   ((0x7     ) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
+#define EVENTLIRCD_EVMAP_LOCK_CAPS   ((0x1 << 2) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
+#define EVENTLIRCD_EVMAP_LOCK_NUM    ((0x1 << 1) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
+#define EVENTLIRCD_EVMAP_LOCK_SCROLL ((0x1 << 0) << EVENTLIRCD_EVMAP_LOCK_OFFSET)
+#define EVENTLIRCD_EVMAP_MOD_OFFSET  (24)
+#define EVENTLIRCD_EVMAP_MOD_MASK    ((0xf     ) << EVENTLIRCD_EVMAP_MOD_OFFSET)
+#define EVENTLIRCD_EVMAP_MOD_CTRL    ((0x1 << 3) << EVENTLIRCD_EVMAP_MOD_OFFSET)
+#define EVENTLIRCD_EVMAP_MOD_SHIFT   ((0x1 << 2) << EVENTLIRCD_EVMAP_MOD_OFFSET)
+#define EVENTLIRCD_EVMAP_MOD_ALT     ((0x1 << 1) << EVENTLIRCD_EVMAP_MOD_OFFSET)
+#define EVENTLIRCD_EVMAP_MOD_META    ((0x1 << 0) << EVENTLIRCD_EVMAP_MOD_OFFSET)
+#define EVENTLIRCD_EVMAP_TYPE_OFFSET (16)
+#define EVENTLIRCD_EVMAP_TYPE_MASK   ((0xff    ) << EVENTLIRCD_EVMAP_TYPE_OFFSET)
 #define EVENTLIRCD_EVMAP_CODE_OFFSET (0)
-#define EVENTLIRCD_EVMAP_CODE_MASK   ((0xffffU  ) << EVENTLIRCD_EVMAP_CODE_OFFSET)
+#define EVENTLIRCD_EVMAP_CODE_MASK   ((0xffff  ) << EVENTLIRCD_EVMAP_CODE_OFFSET)
 
 #if EV_MAX >= 65534
 # error cannot define EVENTLIRCD_EV_NULL because EV_MAX exceeds 65534
@@ -323,8 +323,8 @@ static int input_device_send(struct input_device *device, const struct input_eve
 
 static int input_device_evmap_compare(const void *evmap_a, const void *evmap_b)
 {
-    __s32 code_a = (__s32)(((const struct input_device_evmap *)evmap_a)->code_in);
-    __s32 code_b = (__s32)(((const struct input_device_evmap *)evmap_b)->code_in);
+    __s32 code_a = (__s32)(((struct input_device_evmap *)evmap_a)->code_in);
+    __s32 code_b = (__s32)(((struct input_device_evmap *)evmap_b)->code_in);
 
     return (code_a - code_b);
 }
@@ -1336,12 +1336,13 @@ static int input_device_add(struct udev_device *udev_device)
     unsigned long bit_snd[BITFIELD_LONGS_PER_ARRAY(SND_MAX)];
     unsigned long bit_ff[BITFIELD_LONGS_PER_ARRAY(FF_MAX)];
     unsigned long bit_ff_status[BITFIELD_LONGS_PER_ARRAY(FF_STATUS_MAX)];
+    size_t i;
+    size_t j;
     bool output_active;
-    __u16 type = 0;
-    __u16 code = 0;
+    __u16 type;
+    __u16 code;
     __u16 code_in;
     __u16 code_out;
-    size_t z;
 
     if (udev_device == NULL)
     {
@@ -1440,11 +1441,11 @@ static int input_device_add(struct udev_device *udev_device)
      */
     memset(bit, 0, sizeof(bit));
     ioctl(device->fd, EVIOCGBIT(0, EV_MAX), bit);
-    for (type = 1 ; type < EV_MAX ; type++)
+    for (i = 1 ; i < EV_MAX ; i++)
     {
-        if (BITFIELD_TEST(type, bit))
+        if (BITFIELD_TEST(i, bit))
         {
-            switch (type)
+            switch (i)
             {
                 case EV_KEY:
                     memset(bit_key, 0, sizeof(bit_key));
@@ -1493,11 +1494,11 @@ static int input_device_add(struct udev_device *udev_device)
     /*
      * Check for event types and codes that are not supported by eventlircd.
      */
-    for (type = 1 ; type < EV_MAX ; type++)
+    for (i = 1 ; i < EV_MAX ; i++)
     {
-        if (BITFIELD_TEST(type, bit))
+        if (BITFIELD_TEST(i, bit))
         {
-            switch (type)
+            switch (i)
             {
                 case EV_KEY:
                     break;
@@ -1509,13 +1510,13 @@ static int input_device_add(struct udev_device *udev_device)
                     syslog(LOG_DEBUG,
                            "input device %s: events of unsupported event type EV_MSC will be discarded\n",
                            device->path);
-                    for (code = 0 ; code < MSC_MAX ; code++)
+                    for (j = 0 ; j < MSC_MAX ; j++)
                     {
-                        if (BITFIELD_TEST(code, bit_msc) != 0)
+                        if (BITFIELD_TEST(j, bit_msc) != 0)
                         {
                             syslog(LOG_DEBUG,
                                    "input device %s: event code 0x%02x of unsupported event type EV_MSC will be discarded\n",
-                                   device->path, (unsigned int)code);
+                                   device->path, (unsigned int)j);
                         }
                     }
                     break;
@@ -1523,30 +1524,30 @@ static int input_device_add(struct udev_device *udev_device)
                     syslog(LOG_DEBUG,
                            "input device %s: events of unsupported event type EV_SW will be discarded\n",
                            device->path);
-                    for (code = 0 ; code < SW_MAX ; code++)
+                    for (j = 0 ; j < SW_MAX ; j++)
                     {
-                        if (BITFIELD_TEST(code, bit_sw) != 0)
+                        if (BITFIELD_TEST(j, bit_sw) != 0)
                         {
                             syslog(LOG_DEBUG,
                                    "input device %s: event code 0x%02x of unsupported event type EV_SW will be discarded\n",
-                                   device->path, (unsigned int)code);
+                                   device->path, (unsigned int)j);
                         }
                     }
                     break;
                 case EV_LED:
-                    for (code = 0 ; code < LED_MAX ; code++)
+                    for (j = 0 ; j < LED_MAX ; j++)
                     {
-                        if ((code == LED_CAPSL  ) ||
-                            (code == LED_NUML   ) ||
-                            (code == LED_SCROLLL))
+                        if ((j == LED_CAPSL  ) ||
+                            (j == LED_NUML   ) ||
+                            (j == LED_SCROLLL))
                         {
                             continue;
                         }
-                        if (BITFIELD_TEST(code, bit_led) != 0)
+                        if (BITFIELD_TEST(j, bit_led) != 0)
                         {
                             syslog(LOG_DEBUG,
                                    "input device %s: unsupported event code 0x%02x of event type EV_LED will be discarded\n",
-                                   device->path, (unsigned int)code);
+                                   device->path, (unsigned int)j);
                         }
                     }
                     break;
@@ -1554,13 +1555,13 @@ static int input_device_add(struct udev_device *udev_device)
                     syslog(LOG_DEBUG,
                            "input device %s: events of unsupported event type EV_SND will be discarded\n",
                            device->path);
-                    for (code = 0 ; code < SND_MAX ; code++)
+                    for (j = 0 ; j < SND_MAX ; j++)
                     {
-                        if (BITFIELD_TEST(code, bit_snd) != 0)
+                        if (BITFIELD_TEST(j, bit_snd) != 0)
                         {
                             syslog(LOG_DEBUG,
                                    "input device %s: event code 0x%02x of unsupported event type EV_SND will be discarded\n",
-                                   device->path, (unsigned int)code);
+                                   device->path, (unsigned int)j);
                         }
                     }
                     break;
@@ -1573,13 +1574,13 @@ static int input_device_add(struct udev_device *udev_device)
                     syslog(LOG_DEBUG,
                            "input device %s: events of unsupported event type EV_FF will be discarded\n",
                            device->path);
-                    for (code = 0 ; code < FF_MAX ; code++)
+                    for (j = 0 ; j < FF_MAX ; j++)
                     {
-                        if (BITFIELD_TEST(code, bit_ff) != 0)
+                        if (BITFIELD_TEST(j, bit_ff) != 0)
                         {
                             syslog(LOG_DEBUG,
                                    "input device %s: event code 0x%02x of unsupported event type EV_FF will be discarded\n",
-                                   device->path, (unsigned int)code);
+                                   device->path, (unsigned int)j);
                         }
                     }
                     break;
@@ -1592,20 +1593,20 @@ static int input_device_add(struct udev_device *udev_device)
                     syslog(LOG_DEBUG,
                            "input device %s: events of unsupported event type EV_FF_STATUS will be discarded\n",
                            device->path);
-                    for (code = 0 ; code < FF_STATUS_MAX ; code++)
+                    for (j = 0 ; j < FF_STATUS_MAX ; j++)
                     {
-                        if (BITFIELD_TEST(code, bit_ff_status) != 0)
+                        if (BITFIELD_TEST(j, bit_ff_status) != 0)
                         {
                             syslog(LOG_DEBUG,
                                    "input device %s: event code 0x%02x of unsupported event type EV_FF_STATUS will be discarded\n",
-                                   device->path, (unsigned int)code);
+                                   device->path, (unsigned int)j);
                         }
                     }
                     break;
                 default:
                     syslog(LOG_DEBUG,
                            "input device %s: events of unsupported event type 0x%02x will be discarded\n",
-                           device->path, (unsigned int)code);
+                           device->path, (unsigned int)i);
                     break;
             }
         }
@@ -1644,9 +1645,9 @@ static int input_device_add(struct udev_device *udev_device)
      * Create output event device for events that are not sent to the lircd socket.
      */
     device->output.fd = -1;
-    for (z = 0 ; (device->output.fd == -1) && (uinput_devname[z] != NULL) ; z++)
+    for (i = 0 ; (device->output.fd == -1) && (uinput_devname[i] != NULL) ; i++)
     {
-        device->output.fd = open(uinput_devname[z], O_WRONLY | O_NDELAY);
+        device->output.fd = open(uinput_devname[i], O_WRONLY | O_NDELAY);
     }
     if (device->output.fd == -1)
     {
@@ -1691,19 +1692,21 @@ static int input_device_add(struct udev_device *udev_device)
      * that are supported by eventlircd.
      */
     output_active = false;
-    for (type = 1 ; type < EV_MAX ; type++)
+    for (i = 1 ; i < EV_MAX ; i++)
     {
-        if (BITFIELD_TEST(type, bit))
+        if (BITFIELD_TEST(i, bit))
         {
-            if (type == 0)
+            if (i == 0)
             {
                 continue;
             }
-            switch (type)
+            switch (i)
             {
                 case EV_KEY:
-                    for (code = 0 ; code < KEY_MAX ; code++)
+                    for (j = 0 ; j < KEY_MAX ; j++)
                     {
+                        type = i;
+                        code = j;
                         if (BITFIELD_TEST(code, bit_key) != 0)
                         {
                             /*
@@ -1768,8 +1771,10 @@ static int input_device_add(struct udev_device *udev_device)
                     }
                     break;
                 case EV_REL:
-                    for (code = 0 ; code < REL_MAX ; code++)
+                    for (j = 0 ; j < REL_MAX ; j++)
                     {
+                        type = i;
+                        code = j;
                         if (BITFIELD_TEST(code, bit_rel) != 0)
                         {
                             /*
@@ -1804,8 +1809,10 @@ static int input_device_add(struct udev_device *udev_device)
                     }
                     break;
                 case EV_ABS:
-                    for (code = 0 ; code < ABS_MAX ; code++)
+                    for (j = 0 ; j < ABS_MAX ; j++)
                     {
+                        type = i;
+                        code = j;
                         if (BITFIELD_TEST(code, bit_abs) != 0)
                         {
                             /*
@@ -1876,10 +1883,10 @@ static int input_device_add(struct udev_device *udev_device)
      */
     if (BITFIELD_TEST(EV_KEY, bit) != 0)
     {
-        for (z = 0 ; z < device->evmap_size ; z++)
+        for (i = 0 ; i < device->evmap_size ; i++)
         {
-            code_in  = (__u16)device->evmap[z].code_in;
-            code_out = (__u16)device->evmap[z].code_out;
+            code_in  = device->evmap[i].code_in;
+            code_out = device->evmap[i].code_out;
             /*
              * Skip keyboard shortcuts that map to NULL.
              */
@@ -2003,7 +2010,7 @@ static int input_device_add(struct udev_device *udev_device)
         (device->led.numlock    == true) ||
         (device->led.scrolllock == true))
     {
-        uint8_t bit[LED_MAX/8 + 1];
+        int8_t bit[LED_MAX/8 + 1];
         memset(bit, 0, sizeof(bit));
         ioctl(device->fd, EVIOCGLED(sizeof(bit)), bit);
         if (device->led.capslock == true)
