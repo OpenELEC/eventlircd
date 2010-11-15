@@ -1,3 +1,4 @@
+KEY_BACKSPACE  = KEY_BACK
 KEY_1          = KEY_NUMERIC_1
 KEY_2          = KEY_NUMERIC_2
 KEY_3          = KEY_NUMERIC_3
@@ -8,7 +9,6 @@ KEY_7          = KEY_NUMERIC_7
 KEY_8          = KEY_NUMERIC_8
 KEY_9          = KEY_NUMERIC_9
 KEY_0          = KEY_NUMERIC_0
-KEY_E          = KEY_BACK
 KEY_KP1        = KEY_NUMERIC_1
 KEY_KP2        = KEY_NUMERIC_2
 KEY_KP3        = KEY_NUMERIC_3
