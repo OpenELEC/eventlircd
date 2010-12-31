@@ -151,6 +151,7 @@ struct input_device {
 	char *path;                         /* The input device's path in the device file system. */
 	struct input_device_evmap *evmap;   /* The input device's event map table. */
 	size_t evmap_size;                  /* The input device's event map table size. */
+	bool repeat_filter;                 /* The input device's repeat filter flag. */
 	uint32_t lock_state;                /* The input device's current lock key state. */
 	uint32_t modifier_state;            /* The input device's current modifier key state. */
 	struct input_device_event current;  /* The input device's current event. */
@@ -180,6 +181,7 @@ struct input_device {
  */
 struct {
 	char *evmap_dir;                    /* The name of the directory containing event map files. */
+	bool repeat_filter;                 /* The flag indicating whether or not repeat filtering is enabled. */
 	struct {
 		int fd;
 		struct udev_monitor *monitor;
@@ -187,6 +189,7 @@ struct {
 	struct input_device *device_list;   /* The linked list of udev detected input devices. */
 } eventlircd_input = {
 	.evmap_dir = NULL,
+	.repeat_filter = false,
 	.udev = {
 		.fd = -1,
 		.monitor = NULL
@@ -1094,21 +1097,24 @@ static int input_device_event_update(struct input_device *device, const struct i
 		 * longer for the first repeat in order to allow the user to release
 		 * the key before repeating starts.
 		 */
-		if (evkey_type[device->current.event_out.code] == EVENTLIRCD_EVKEY_TYPE_KEY) {
-			time_delta = 1000000 * (device->current.event_out.time.tv_sec  - previous->event_out.time.tv_sec ) +
-			                       (device->current.event_out.time.tv_usec - previous->event_out.time.tv_usec);
-			if (((previous->repeat_count == 0) && (time_delta <  900000)) ||
-			    ((previous->repeat_count == 1) && (time_delta <  500000)) ||
-			    ((previous->repeat_count == 2) && (time_delta <  300000)) ||
-			    ((previous->repeat_count == 3) && (time_delta <  200000)) ||
-			    ((previous->repeat_count == 4) && (time_delta <  150000)) ||
-			    ((previous->repeat_count >= 5) && (time_delta <  100000))) {
-				memset(&(device->current.event_out), 0, sizeof(struct input_event));
-				device->current.event_out.type = EVENTLIRCD_EV_NULL;
-				device->current.repeat_count = 0;
-				return 0;
-			}
-		}
+                if (device->repeat_filter == true)
+                {
+		     if (evkey_type[device->current.event_out.code] == EVENTLIRCD_EVKEY_TYPE_KEY) {
+			     time_delta = 1000000 * (device->current.event_out.time.tv_sec  - previous->event_out.time.tv_sec ) +
+			                            (device->current.event_out.time.tv_usec - previous->event_out.time.tv_usec);
+			     if (((previous->repeat_count == 0) && (time_delta <  900000)) ||
+			         ((previous->repeat_count == 1) && (time_delta <  500000)) ||
+			         ((previous->repeat_count == 2) && (time_delta <  300000)) ||
+			         ((previous->repeat_count == 3) && (time_delta <  200000)) ||
+			         ((previous->repeat_count == 4) && (time_delta <  150000)) ||
+			         ((previous->repeat_count >= 5) && (time_delta <  100000))) {
+				     memset(&(device->current.event_out), 0, sizeof(struct input_event));
+				     device->current.event_out.type = EVENTLIRCD_EV_NULL;
+				     device->current.repeat_count = 0;
+				     return 0;
+			     }
+		     }
+                }
 		previous->repeat_count++;
 		previous->event_out.time = device->current.event_out.time;
 		device->current.repeat_count = previous->repeat_count;
@@ -1413,6 +1419,8 @@ static int input_device_add(struct udev_device *udev_device)
 		free(device);
 		return -1;
 	}
+
+        device->repeat_filter = eventlircd_input.repeat_filter;
 	
 	if ((device->remote = strndup(remote, PATH_MAX)) == NULL) {
 		syslog(LOG_ERR,
@@ -2072,7 +2080,7 @@ int input_exit()
 	return return_code;
 }
 
-int input_init(const char *evmap_dir)
+int input_init(const char *evmap_dir, const bool repeat_filter)
 {
 	struct udev *udev;
 	struct udev_enumerate *enumerate;
@@ -2082,6 +2090,7 @@ int input_init(const char *evmap_dir)
 	struct udev_device *udev_device;
 
 	eventlircd_input.evmap_dir = NULL;
+	eventlircd_input.repeat_filter = false;
 	eventlircd_input.udev.fd = -1;
 	eventlircd_input.udev.monitor = NULL;
 	eventlircd_input.device_list = NULL;
@@ -2099,6 +2108,8 @@ int input_init(const char *evmap_dir)
 		input_exit();
 		return -1;
 	}
+
+	eventlircd_input.repeat_filter = repeat_filter;
 
 	if ((udev = udev_new()) == NULL) {
 		syslog(LOG_ERR,

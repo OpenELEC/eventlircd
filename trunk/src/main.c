@@ -54,6 +54,8 @@ int main(int argc,char **argv)
         {"evmap",required_argument,NULL,'e'},
         {"socket",required_argument,NULL,'s'},
         {"mode",required_argument,NULL,'m'},
+        {"process",required_argument,NULL,'p'},
+        {"repeat-filter",no_argument,NULL,'R'},
         {"release",required_argument,NULL,'r'},
         {0, 0, 0, 0}
     };
@@ -63,6 +65,7 @@ int main(int argc,char **argv)
     const char *input_device_evmap_dir = EVMAP_DIR;
     const char *lircd_socket_path = LIRCD_SOCKET;
     mode_t lircd_socket_mode = S_IWUSR | S_IRUSR | S_IWGRP | S_IRGRP | S_IWOTH | S_IROTH;
+    bool input_repeat_filter = false;
     const char *lircd_release_suffix = NULL;
     int opt;
 
@@ -80,9 +83,14 @@ int main(int argc,char **argv)
 		fprintf(stdout, "    -V --version           print the program version and exit\n");
 		fprintf(stdout, "    -v --verbose           increase the output message verbosity (-v, -vv or -vvv)\n");
 		fprintf(stdout, "    -f --foreground        run in the foreground\n");
-		fprintf(stdout, "    -e --evmap=<dir>       directory containing input device event map files (default is '%s')\n", input_device_evmap_dir);
-		fprintf(stdout, "    -s --socket=<socket>   lircd socket (default is '%s')\n", lircd_socket_path);
-		fprintf(stdout, "    -m --mode=<mode>       lircd socket mode (default is '%04o')\n", lircd_socket_mode);
+		fprintf(stdout, "    -e --evmap=<dir>       directory containing input device event map files (default is '%s')\n",
+                                                            input_device_evmap_dir);
+		fprintf(stdout, "    -s --socket=<socket>   lircd socket (default is '%s')\n",
+                                                            lircd_socket_path);
+		fprintf(stdout, "    -m --mode=<mode>       lircd socket mode (default is '%04o')\n",
+                                                            lircd_socket_mode);
+		fprintf(stdout, "    -R --repeat-filter     enable repeat filtering (default is '%s')\n",
+                                                            input_repeat_filter ? "false" : "true");
 		fprintf(stdout, "    -r --release=<suffix>  generate key release events suffixed with <suffix>\n");
                 exit(EX_OK);
                 break;
@@ -109,6 +117,9 @@ int main(int argc,char **argv)
                 break;
             case 'm':
                 lircd_socket_mode = (mode_t)atol(optarg);
+                break;
+            case 'R':
+                input_repeat_filter = true;
                 break;
             case 'r':
                 lircd_release_suffix = optarg;
@@ -156,7 +167,7 @@ int main(int argc,char **argv)
         daemon(0, 0);
     }
 
-    if (input_init(input_device_evmap_dir) != 0)
+    if (input_init(input_device_evmap_dir, input_repeat_filter) != 0)
     {
         monitor_exit();
         lircd_exit();

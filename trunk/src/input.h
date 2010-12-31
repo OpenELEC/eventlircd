@@ -19,7 +19,7 @@
 #ifndef _EVENTLIRCD_INPUT_H_
 #define _EVENTLIRCD_INPUT_H_ 1
 
-int input_init(const char* evmap_dir);
+int input_init(const char* evmap_dir, const bool repeat_filter);
 int input_exit();
 
 #endif
