@@ -15,23 +15,13 @@
 .\" You should have received a copy of the GNU General Public License
 .\" along with eventlircd.  If not, see <http://www.gnu.org/licenses/>.
 .\"
-.TH eventlircd 8 "JANUARY 09, 2010"
+.TH eventlircd 8 "DECEMBER 31, 2010"
 .SH NAME
 eventlircd \- an LIRC daemon with integrated udev support.
 .SH SYNOPSIS
 .LP
 .B eventlircd
-.RB [ \-vf ]
-.RB [ \-s
-.IR socket ]
-.RB [ \-m
-.IR mode ]
-.RB [ \-r
-.IR suffix ]
-.LP
-.B eventlircd -V
-.LP
-.B eventlircd -h
+.IR [ OPTION ]
 .SH AVAILABILITY
 Any GNU/Linux system with udev (at least version 136) and uinput (at least driver version 0.3) support.
 .SH DESCRIPTION
@@ -70,6 +60,26 @@ Create the lircd socket \fBsocket\fR rather than lircd socket @LIRCD_SOCKET@.
 .TP
 \fB\-m\fR \fB\-\-mode=mode\fR
 Create the lircd socket with mode \fBmode\fR rather than with mode 0666.
+.TP
+\fB\-R\fR \fB\-\-repeat-filter\fR
+Filter input event repeats.
+.IP
+Because \fBeventlircd\fR can receive input from different input sources with different methods for limiting repeats,
+the input event repeat rate may differ between inputs.
+Therefore, in order to normalize the output repeat rate,
+\fBeventlircd\fR uses time rather than count to filter the input event repeats.
+.IP
+Because users often want to use repeats to scroll both short and long on-screen lists,
+the filtered repeat rate start slow and increases.
+.IP
+The time based repeat filtering provided by \fBeventlircd\fR replaces
+the count based repeat filtering configured in the \fB.lircrc\fR file.
+Therefore,
+if you enable \fBeventlircd\fR's time based repeat filtering,
+then you should disable \fB.lircrc\fR's count based repeat filtering.
+That is, in the \fB.lircrc\fR file,
+the value of \fBdelay\fR should be '0'
+and the value of \fBrepeat\fR should be either '0' (ignore repeats) or '1' (allow repeats).
 .TP
 \fB\-r\fR \fB\-\-release=suffix\fR
 Generate key release events with \fBsuffix\fR appended to the key name.
