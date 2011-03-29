@@ -1242,7 +1242,7 @@ static int input_device_close(struct input_device *device)
 		device->path = NULL;
 	}
 
-	return 0;
+	return return_code;
 }
 
 static int input_device_purge()
