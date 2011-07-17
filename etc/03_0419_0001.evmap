@@ -3,7 +3,7 @@
  ctrl+shift+alt+KEY_H    = KEY_PRINT        # Print
  alt+KEY_F4              = KEY_CLOSE        # Close
  ctrl+shift+alt+KEY_3    = KEY_MP3          # Music
- ctrl+shift+alt+KEY_4    = KEY_MEDIA        # Pictures
+ ctrl+shift+alt+KEY_4    = KEY_IMAGES       # Pictures
  ctrl+shift+alt+KEY_5    = KEY_VIDEO        # Videos
  ctrl+shift+alt+KEY_1    = KEY_CONTEXT_MENU # DVD/Menu
 #KEY_UP                  = KEY_UP           # Up

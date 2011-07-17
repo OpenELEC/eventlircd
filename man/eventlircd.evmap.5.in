@@ -99,7 +99,7 @@ For example, the Adesso ARC-1100 remote control might use an input device event 
 .LP
  ctrl+KEY_M          = KEY_MP3           # My Music
 .LP
- ctrl+KEY_I          = KEY_MEDIA         # My Pictures
+ ctrl+KEY_I          = KEY_IMAGES        # My Pictures
 .LP
  ctrl+KEY_E          = KEY_VIDEO         # My Videos
 .LP
