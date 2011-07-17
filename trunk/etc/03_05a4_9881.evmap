@@ -2,7 +2,7 @@
  KEY_SLEEP           = KEY_POWER       # Sleep
  ctrl+shift+KEY_T    = KEY_VCR         # My TV
  ctrl+KEY_M          = KEY_MP3         # My Music
- ctrl+KEY_I          = KEY_MEDIA       # My Pictures
+ ctrl+KEY_I          = KEY_IMAGES      # My Pictures
  ctrl+KEY_E          = KEY_VIDEO       # My Videos
  ctrl+KEY_O          = KEY_VCR2        # Record TV
  ctrl+KEY_G          = KEY_PROGRAM     # Guide

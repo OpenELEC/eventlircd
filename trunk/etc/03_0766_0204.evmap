@@ -18,7 +18,7 @@
  KEY_SLEEP        = KEY_POWER       # Power
  KEY_DVD          = KEY_DVD         # DVD/VCD
  KEY_MP3          = KEY_MP3         # Music
- KEY_MEDIA        = KEY_MEDIA       # Pictures
+ KEY_MEDIA        = KEY_IMAGES      # Pictures
  KEY_VIDEO        = KEY_VIDEO       # Videos
  KEY_TV           = KEY_TV          # Live TV
  KEY_RECORD       = KEY_RECORD      # Record
