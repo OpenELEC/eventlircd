@@ -20,6 +20,12 @@
 #     Used to tell lircd_helper the name of the lircd driver.
 #   lircd_conf:
 #     Used to tell lircd_helper the path to the lircd.conf file to use.
+#   lircd_uinput_disable:
+#     Used to tell lircd_helper to not not have lircd create a uninput event
+#     device. Kernel LIRC drivers that use rc_core perform kernel space signal
+#     decoding and create an event device. Therefore, we do not want lircd to
+#     create another event device. However, if the LIRC device is a transmitter
+#     as well as receiver, then we still need lircd running.
 ################################################################################
 
 case "${ACTION}" in
@@ -38,7 +44,9 @@ case "${ACTION}" in
             daemon='@sbindir@/lircd'
             daemon="${daemon} --driver=${lircd_driver}"
             daemon="${daemon} --device=${DEVNAME}"
-            daemon="${daemon} --uinput"
+            if test ! "x${lircd_uinput_disable}" = "xtrue" ; then
+                daemon="${daemon} --uinput"
+            fi
             daemon="${daemon} --output=@localstatedir@/run/lirc/lircd-${devname_instance}"
             daemon="${daemon} --pidfile=@localstatedir@/run/lirc/lircd-${devname_instance}.pid"
             daemon="${daemon} ${lircd_conf}"
