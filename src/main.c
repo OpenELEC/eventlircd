@@ -164,7 +164,12 @@ int main(int argc,char **argv)
 
     if (foreground != true)
     {
-        daemon(0, 0);
+        if (daemon(0, 0) != 0)
+        {
+            monitor_exit();
+            lircd_exit();
+            exit(EXIT_FAILURE);
+        }
     }
 
     if (input_init(input_device_evmap_dir, input_repeat_filter) != 0)
