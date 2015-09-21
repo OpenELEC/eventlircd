@@ -73,7 +73,7 @@ int main(int argc,char **argv)
 
     openlog(progname, LOG_CONS | LOG_PERROR | LOG_PID, LOG_DAEMON);
 
-    while((opt = getopt_long(argc, argv, "hVvfe:s:m:r:", longopts, NULL)) != -1)
+    while((opt = getopt_long(argc, argv, "hVvfe:s:m:Rr:", longopts, NULL)) != -1)
     {
         switch(opt)
         {
