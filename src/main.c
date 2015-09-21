@@ -54,7 +54,6 @@ int main(int argc,char **argv)
         {"evmap",required_argument,NULL,'e'},
         {"socket",required_argument,NULL,'s'},
         {"mode",required_argument,NULL,'m'},
-        {"process",required_argument,NULL,'p'},
         {"repeat-filter",no_argument,NULL,'R'},
         {"release",required_argument,NULL,'r'},
         {0, 0, 0, 0}
