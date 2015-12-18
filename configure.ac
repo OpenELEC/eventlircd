@@ -92,10 +92,15 @@ dnl event_name_to_code.h.sh, evkey_code_to_name.h.sh and evkey_type.h.sh
 dnl in order for them to generate the header files event_name_to_code.h,
 dnl evkey_code_to_name.h and evkey_type.h respectively
 AX_ABSOLUTE_HEADER(linux/input.h)
-if test "x$gl_cv_absolute_linux_input_h" = "x" ; then
-    AC_MSG_ERROR([failed to find the absolute path to header file linux/input.h])
+AX_ABSOLUTE_HEADER(linux/input-event-codes.h)
+if test "x$gl_cv_absolute_linux_input_event_codes_h" = "x" ; then
+  if test "x$gl_cv_absolute_linux_input_h" = "x" ; then
+      AC_MSG_ERROR([failed to find the absolute path to header file linux/input.h or linux/input-event-codes.h])
+  fi
+  AC_SUBST(ABSOLUTE_LINUX_INPUT_H, $gl_cv_absolute_linux_input_h)
+else
+  AC_SUBST(ABSOLUTE_LINUX_INPUT_H, $gl_cv_absolute_linux_input_event_codes_h)
 fi
-AC_SUBST(ABSOLUTE_LINUX_INPUT_H, $gl_cv_absolute_linux_input_h)
 
 PKG_CHECK_MODULES(LIBUDEV, [libudev >= 136])
 
