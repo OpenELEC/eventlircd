@@ -118,7 +118,6 @@ dnl Only add an optimization flag when one is not already present.
 if ! echo " ${CC} ${CFLAGS} " | ${GREP} ' -O@<:@^ @:>@* ' > /dev/null ; then
     AX_C_CHECK_FLAG([-O2],[],[],[CFLAGS="$CFLAGS -O2"],[])
 fi
-AX_C_CHECK_FLAG([-pedantic],[],[],[CFLAGS="$CFLAGS -pedantic"],[])
 AX_C_CHECK_FLAG([-flto],[],[],[CFLAGS="$CFLAGS -flto"],[])
 AX_C_CHECK_FLAG([-fvisibility=hidden],[],[],[CFLAGS="$CFLAGS -fvisibility=hidden"],[])
 AX_C_CHECK_FLAG([-Werror],[],[],[CFLAGS="$CFLAGS -Werror"],[])
