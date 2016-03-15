@@ -1929,7 +1929,19 @@ static int input_device_add(struct udev_device *udev_device)
 	 *
 	 */
 	if (output_active == true) {
-		write(device->output.fd, &device->output.dev, sizeof(device->output.dev));
+		if (write(device->output.fd, &device->output.dev, sizeof(device->output.dev)) != sizeof(device->output.dev)) {
+			syslog(LOG_ERR,
+			       "input device %s: unable to write output event device: %s\n",
+			       device->path,
+			       strerror(errno));
+			close(device->output.fd);
+			free(device->remote);
+			input_device_evmap_exit(device);
+			close(device->fd);
+			free(device->path);
+			free(device);
+			return -1;
+		}
 		if (ioctl(device->output.fd, UI_DEV_CREATE)) {
 			syslog(LOG_ERR,
 			       "input device %s: unable to create output event device: %s\n",
