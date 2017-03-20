@@ -147,5 +147,5 @@ AX_LD_CHECK_FLAG([-fvisibility=hidden],[],[],[LDFLAGS="$LDFLAGS -fvisibility=hid
 AX_LD_CHECK_FLAG([-Wl,--as-needed],[],[],[LDFLAGS="$LDFLAGS -Wl,--as-needed"],[])
 
 AC_CONFIG_HEADERS([src/config.h])
-AC_CONFIG_FILES([Makefile etc/Makefile man/Makefile man/eventlircd.8 man/eventlircd.evmap.5 src/Makefile src/event_name_to_code.h.sh src/evkey_code_to_name.h.sh src/evkey_type.h.sh udev/Makefile udev/lircd_helper udev/wakeup_enable udev/rules.d/98-lircd.rules.disabled udev/rules.d/98-eventlircd.rules.disabled])
+AC_CONFIG_FILES([Makefile etc/Makefile man/Makefile man/eventlircd.8 man/eventlircd.evmap.5 src/Makefile src/event_name_to_code.h.sh src/evkey_code_to_name.h.sh src/evkey_type.h.sh udev/Makefile udev/lircd_helper udev/wakeup_enable udev/rules.d/98-lircd.rules.disabled udev/rules.d/98-eventlircd.rules.disabled tools/Makefile])
 AC_OUTPUT
