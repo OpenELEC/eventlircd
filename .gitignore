@@ -1,0 +1,14 @@
+# Vim temporary and backup files
+.*.swp
+*~
+
+# autoreconf output files
+Makefile.in
+aclocal.m4
+autom4te.cache/
+build-aux/
+configure
+src/config.h.in
+
+# build directory
+build/
