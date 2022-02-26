@@ -105,8 +105,7 @@ int main(int argc,char **argv)
                 {
                     syslog(LOG_WARNING, "the highest verbosity level is -vvv\n");
                 }
-                foreground = true;
-                break;
+		/* FALLTHRU */
             case 'f':
                 foreground = true;
                 break;
